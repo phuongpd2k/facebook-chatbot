@@ -19,6 +19,8 @@ public class EventHandlerImpl implements EventHandler {
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
 
+	private final String fbURL = "https://graph.facebook.com/v2.6/me/messages";
+
 	private WebClient clientPool;
 
 	@Override
@@ -65,7 +67,7 @@ public class EventHandlerImpl implements EventHandler {
 				+ "    },\r\n" + "    \"message\": " + response + "\r\n" + "  }";
 
 		// Send the HTTP request to the Messenger Platform
-		clientPool = WebClient.create(SIMSIMI_URL);
+		clientPool = WebClient.create(fbURL);
 		Response clientResponse = clientPool.post((Object) requestBody);
 		log.info("Request to send message" + clientResponse.readEntity(String.class));
 	}
