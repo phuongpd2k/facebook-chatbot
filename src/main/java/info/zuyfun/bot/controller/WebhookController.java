@@ -55,7 +55,14 @@ public class WebhookController {
 //			// Returns a '404 Not Found' if event is not from a page subscription
 //			return new ResponseEntity<>("NOT_FOUND", HttpStatus.NOT_FOUND);
 //		}
+		JsonObject objJson = new JsonObject(objReq);
+		if (objJson.getString("object", "").equals("page")) {
+
+		}
+
 		log.info("JsonObject request: {}" + objReq);
+		log.info("JsonObject object: {}" + objJson.getString("object"));
+		log.info("Json Entry array: " + objJson.getJsonArray("entry"));
 		return new ResponseEntity<Object>(objReq, HttpStatus.OK);
 	}
 
