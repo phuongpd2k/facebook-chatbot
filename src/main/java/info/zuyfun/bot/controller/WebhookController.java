@@ -47,7 +47,7 @@ public class WebhookController {
 
 	@PostMapping("/webhook")
 	public ResponseEntity<Object> sendWebhook(@RequestBody String objReq) {
-		log.info("Start Method:POST Webhook");
+		log.info("Start Method:POST Webhook: " + objReq);
 		// Checks this is an event from a page subscription
 		JsonObject objJson = new JsonObject(objReq);
 		if (objJson.getString("object", "").equals("page")) {
