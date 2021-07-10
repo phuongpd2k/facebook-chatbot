@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import info.zuyfun.bot.dto.Messaging;
 import info.zuyfun.bot.dto.RequestObject;
+import io.vertx.core.json.JsonObject;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class WebhookController {
 
@@ -41,17 +44,19 @@ public class WebhookController {
 	}
 
 	@PostMapping("/webhook")
-	public ResponseEntity<Object> sendWebhook(@RequestBody RequestObject objReq) {
+	public ResponseEntity<Object> sendWebhook(@RequestBody JsonObject objReq) {
 		// Checks this is an event from a page subscription
-		if (objReq.getObject().equals("page")) {
-			for (Messaging mess : objReq.getEntry()) {
-				System.out.println(mess);
-			}
-			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
-		} else {
-			// Returns a '404 Not Found' if event is not from a page subscription
-			return new ResponseEntity<>("NOT_FOUND", HttpStatus.NOT_FOUND);
-		}
-
+//		if (objReq.getObject().equals("page")) {
+//			for (Messaging mess : objReq.getEntry()) {
+//		
+//			}
+//			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
+//		} else {
+//			// Returns a '404 Not Found' if event is not from a page subscription
+//			return new ResponseEntity<>("NOT_FOUND", HttpStatus.NOT_FOUND);
+//		}
+		log.info("JsonObject request: {}", objReq);
+		return new ResponseEntity<Object>(objReq, HttpStatus.OK);
 	}
+
 }
