@@ -34,11 +34,11 @@ public class EventHandlerImpl implements EventHandler {
 			// will be added to the body of our request to the Send API
 			String messageResponse = "";
 			if (!callSimsimi(messageText).isEmpty()) {
-				JsonObject simsimiResponse = new JsonObject();
+				JsonObject simsimiResponse = new JsonObject(callSimsimi(messageText));
 				messageResponse = simsimiResponse.getString("success");
 			}
 
-			jsonStr = "{\r\n     \"text\": \"" + messageResponse + "    }";
+			jsonStr = "{\r\n     \"text\": \"" + messageResponse + "\"    }";
 		} else if (attachments != null) {
 			// Get the URL of the message attachment
 			String attachmentUrl = attachments.getJsonObject(0).getJsonObject("payload").getString("url");
