@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import info.zuyfun.bot.dto.Messaging;
 import info.zuyfun.bot.dto.RequestObject;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,8 +61,10 @@ public class WebhookController {
 
 		}
 
+		JsonArray objArray = objJson.getJsonArray("entry");
 		log.info("JsonObject request: {}" + objReq);
 		log.info("JsonObject object: {}" + objJson.getString("object"));
+		log.info("JsonObject sender id: {}" + objJson.getJsonObject("sender").getValue("id"));
 		log.info("Json Entry array: " + objJson.getJsonArray("entry"));
 		return new ResponseEntity<Object>(objReq, HttpStatus.OK);
 	}
