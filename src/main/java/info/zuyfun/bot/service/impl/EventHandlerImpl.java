@@ -56,6 +56,7 @@ public class EventHandlerImpl implements EventHandler {
 	@Override
 	public void handlePostback(String sender_psid, JsonObject received_postback) {
 		String jsonStr = "";
+		
 		log.info("handlePostback received_postback: " + received_postback);
 
 	}
