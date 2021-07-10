@@ -78,6 +78,7 @@ public class EventHandlerImpl implements EventHandler {
 			log.error("*** callSendAPI System Error: " + e);
 		}
 		log.info("FB_ACCESS_TOKEN: " + FB_ACCESS_TOKEN);
+		log.info("request body: " + requestBody);
 	}
 
 	@Override
