@@ -93,16 +93,9 @@ public class EventHandlerImpl implements EventHandler {
 			clientPool = WebClient.create(SIMSIMI_URL);
 			clientPool.query("text", messageText).query("lang", "vi_VN");
 			Response response = clientPool.get();
-			switch (response.getStatus()) {
-			case 200:
 				result = response.readEntity(String.class);
 				log.info("*** Data response " + result);
-				break;
-			default:
-				log.error("*** Lỗi API");
-				result = response.readEntity(String.class);
-				break;
-			}
+		
 		} catch (Exception ex) {
 			log.error("*** Lỗi hệ thống - Exception: " + ex);
 		}
