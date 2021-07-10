@@ -47,6 +47,7 @@ public class WebhookController {
 
 	@PostMapping("/webhook")
 	public ResponseEntity<Object> sendWebhook(@RequestBody String objReq) {
+		log.debug("Start Method:POST Webhook");
 		// Checks this is an event from a page subscription
 		JsonObject objJson = new JsonObject(objReq);
 		if (objJson.getString("object", "").equals("page")) {
@@ -66,7 +67,6 @@ public class WebhookController {
 					}
 				}
 			}
-			log.info("JsonObject request: {}" + objReq);
 			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>("NOT_FOUND", HttpStatus.NOT_FOUND);
