@@ -32,8 +32,13 @@ public class EventHandlerImpl implements EventHandler {
 		if (!messageText.isEmpty()) {
 			// Create the payload for a basic text message, which
 			// will be added to the body of our request to the Send API
-			jsonStr = "{\r\n     \"text\": \"You sent the message:" + messageText + ". Now send me an attachment!\"\r\n"
-					+ "    }";
+			String messageResponse = "";
+			if (!callSimsimi(messageText).isEmpty()) {
+				JsonObject simsimiResponse = new JsonObject();
+				messageResponse = simsimiResponse.getString("success");
+			}
+
+			jsonStr = "{\r\n     \"text\": \"" + messageResponse + "    }";
 		} else if (attachments != null) {
 			// Get the URL of the message attachment
 			String attachmentUrl = attachments.getJsonObject(0).getJsonObject("payload").getString("url");
