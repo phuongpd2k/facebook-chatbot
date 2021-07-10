@@ -22,8 +22,8 @@ public class WebhookController {
 	@Value("${verify_token}")
 	private String VERIFY_TOKEN;
 
-//	@Autowired
-//	private EventHandler service;
+	@Autowired
+	private EventHandler service;
 
 	@GetMapping("/webhook")
 	public ResponseEntity<Object> verifyWebhook(HttpServletRequest req) {
@@ -52,17 +52,19 @@ public class WebhookController {
 		JsonObject objJson = new JsonObject(objReq);
 		if (objJson.getString("object", "").equals("page")) {
 			JsonArray objJsonArray = objJson.getJsonArray("entry");
-			/*
-			 * for (int i = 0; i < objJsonArray.size(); i++) { JsonObject objEntry =
-			 * objJsonArray.getJsonObject(i); String senderID =
-			 * objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender")
-			 * .getString("id"); JsonObject message =
-			 * objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("message",
-			 * null); if (message != null && !senderID.equals("102246545033338")) {
-			 * JsonObject postback = message.getJsonObject("attachments", null);
-			 * service.handleMessage(senderID, message); if (postback != null) {
-			 * service.handlePostback(senderID, postback); } } }
-			 */
+
+			JsonObject objEntry = objJsonArray.getJsonObject(0);
+			String senderID = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender")
+					.getString("id");
+			JsonObject message = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("message", null);
+			if (message != null && !senderID.equals("102246545033338")) {
+				JsonObject postback = message.getJsonObject("attachments", null);
+				service.handleMessage(senderID, message);
+				if (postback != null) {
+					service.handlePostback(senderID, postback);
+				}
+			}
+
 			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>("NOT_FOUND", HttpStatus.NOT_FOUND);
