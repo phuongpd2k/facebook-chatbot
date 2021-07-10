@@ -58,7 +58,9 @@ public class WebhookController {
 			for (int i = 0; i < objJsonArray.size(); i++) {
 				JsonObject objMessaging = objJsonArray.getJsonObject(i).getJsonArray("messaging").getJsonObject(0);
 				senderID = objMessaging.getJsonObject("sender").getString("id");
-				messageText = objMessaging.getJsonObject("message").getString("text");
+				messageText = objMessaging.getJsonObject("message", null) != null
+						? objMessaging.getJsonObject("message").getString("text")
+						: "";
 			}
 
 			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
