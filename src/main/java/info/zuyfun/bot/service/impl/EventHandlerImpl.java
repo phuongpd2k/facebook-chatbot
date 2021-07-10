@@ -72,13 +72,12 @@ public class EventHandlerImpl implements EventHandler {
 			clientPool = WebClient.create(fbURL);
 			clientPool.query("access_token", FB_ACCESS_TOKEN);
 			clientPool.header("Content-Type", "application/json");
-			Response clientResponse = clientPool.post(new JsonObject(requestBody));
+			Response clientResponse = clientPool.post((Object) requestBody);
 			log.info("Response message: " + clientResponse.readEntity(String.class));
 		} catch (Exception e) {
 			log.error("*** callSendAPI System Error: " + e);
 		}
 		log.info("FB_ACCESS_TOKEN: " + FB_ACCESS_TOKEN);
-		log.info("Request body" + new JsonObject(requestBody));
 	}
 
 	@Override
