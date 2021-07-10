@@ -49,26 +49,22 @@ public class WebhookController {
 	public ResponseEntity<Object> sendWebhook(@RequestBody String objReq) {
 		// Checks this is an event from a page subscription
 		JsonObject objJson = new JsonObject(objReq);
-		String senderID = null;
-		String messageText = null;
 		if (objJson.getString("object", "").equals("page")) {
-
 			JsonArray objJsonArray = objJson.getJsonArray("entry");
 			for (int i = 0; i < objJsonArray.size(); i++) {
 				JsonObject objEntry = objJsonArray.getJsonObject(i);
-				senderID = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender").getString("id");
+				String senderID = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender")
+						.getString("id");
 				JsonObject message = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("message", null);
-
-//				  if (!messageText.isEmpty()) {
-//					    handleMessage(senderID, webhook_event.message);        
-//					  } else if (webhook_event.postback) {
-//					    handlePostback(senderID, webhook_event.postback);
-//					  }
+				if (message != null) {
+					JsonObject postback = message.getJsonObject("attachments", null);
+					service.handleMessage(senderID, message);
+					if (postback != null) {
+						service.handlePostback(senderID, postback);
+					}
+				}
 			}
-
 			log.info("JsonObject request: {}" + objReq);
-			log.info("JsonObject sender id: {}" + senderID);
-			log.info("JsonObject simsimi response: {}" + service.callSimsimi("hi"));
 			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>("NOT_FOUND", HttpStatus.NOT_FOUND);
