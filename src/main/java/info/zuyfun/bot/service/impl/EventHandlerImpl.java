@@ -69,8 +69,11 @@ public class EventHandlerImpl implements EventHandler {
 		// Send the HTTP request to the Messenger Platform
 		clientPool = WebClient.create(fbURL);
 		clientPool.query("access_token", FB_ACCESS_TOKEN);
-		Response clientResponse = clientPool.post((Object) requestBody);
-		log.info("Request to send message" + clientResponse.readEntity(String.class));
+		Response clientResponse = clientPool.post(new JsonObject(requestBody));
+		log.info("FB_ACCESS_TOKEN: " + FB_ACCESS_TOKEN);
+		log.info("Request body" + new JsonObject(requestBody));
+		log.info("Response message: " + clientResponse.readEntity(String.class));
+		
 	}
 
 	@Override
