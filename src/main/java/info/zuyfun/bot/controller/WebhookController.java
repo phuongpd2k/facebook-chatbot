@@ -44,7 +44,7 @@ public class WebhookController {
 	}
 
 	@PostMapping("/webhook")
-	public ResponseEntity<Object> sendWebhook(@RequestBody JsonObject objReq) {
+	public ResponseEntity<Object> sendWebhook(@RequestBody String objReq) {
 		// Checks this is an event from a page subscription
 //		if (objReq.getObject().equals("page")) {
 //			for (Messaging mess : objReq.getEntry()) {
@@ -55,7 +55,7 @@ public class WebhookController {
 //			// Returns a '404 Not Found' if event is not from a page subscription
 //			return new ResponseEntity<>("NOT_FOUND", HttpStatus.NOT_FOUND);
 //		}
-		log.info("JsonObject request: {}", objReq);
+		log.info("JsonObject request: {}" + objReq);
 		return new ResponseEntity<Object>(objReq, HttpStatus.OK);
 	}
 
