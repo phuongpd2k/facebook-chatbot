@@ -47,15 +47,6 @@ public class WebhookController {
 	@PostMapping("/webhook")
 	public ResponseEntity<Object> sendWebhook(@RequestBody String objReq) {
 		// Checks this is an event from a page subscription
-//		if (objReq.getObject().equals("page")) {
-//			for (Messaging mess : objReq.getEntry()) {
-//		
-//			}
-//			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
-//		} else {
-//			// Returns a '404 Not Found' if event is not from a page subscription
-//			return new ResponseEntity<>("NOT_FOUND", HttpStatus.NOT_FOUND);
-//		}
 		JsonObject objJson = new JsonObject(objReq);
 		String senderID = null;
 		if (objJson.getString("object", "").equals("page")) {
@@ -65,15 +56,13 @@ public class WebhookController {
 				JsonObject objEntry = objJsonArray.getJsonObject(i);
 				senderID = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender").getString("id");
 			}
-
+			log.info("JsonObject request: {}" + objReq);
+			log.info("JsonObject sender id: {}" + senderID);
 			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>("NOT_FOUND", HttpStatus.NOT_FOUND);
 		}
 
-		log.info("JsonObject request: {}" + objReq);
-		log.info("JsonObject object: {}" + objJson.getString("object"));
-		log.info("JsonObject sender id: {}" + senderID);
-		log.info("Json Entry array: " + objJson.getJsonArray("entry"));
-		return new ResponseEntity<Object>(objReq, HttpStatus.OK);
 	}
 
 }
