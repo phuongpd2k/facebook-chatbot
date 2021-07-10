@@ -57,14 +57,21 @@ public class WebhookController {
 //			return new ResponseEntity<>("NOT_FOUND", HttpStatus.NOT_FOUND);
 //		}
 		JsonObject objJson = new JsonObject(objReq);
+		String senderID = null;
 		if (objJson.getString("object", "").equals("page")) {
 
+			JsonArray objJsonArray = objJson.getJsonArray("entry");
+			for (int i = 0; i < objJsonArray.size(); i++) {
+				JsonObject objEntry = objJsonArray.getJsonObject(i);
+				senderID = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender").getString("id");
+			}
+
+			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
 		}
 
-		JsonArray objArray = objJson.getJsonArray("entry");
 		log.info("JsonObject request: {}" + objReq);
 		log.info("JsonObject object: {}" + objJson.getString("object"));
-		log.info("JsonObject sender id: {}" + objJson.getJsonObject("sender").getValue("id"));
+		log.info("JsonObject sender id: {}" + senderID);
 		log.info("Json Entry array: " + objJson.getJsonArray("entry"));
 		return new ResponseEntity<Object>(objReq, HttpStatus.OK);
 	}
