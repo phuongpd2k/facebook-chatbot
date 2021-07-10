@@ -32,8 +32,8 @@ public class EventHandlerImpl implements EventHandler {
 		if (!messageText.isEmpty()) {
 			// Create the payload for a basic text message, which
 			// will be added to the body of our request to the Send API
-			jsonStr = "{\r\n     \"text\": \"You sent the message:" + messageText
-					+ ". Now send me an attachment!\"\r\n" + "    }";
+			jsonStr = "{\r\n     \"text\": \"You sent the message:" + messageText + ". Now send me an attachment!\"\r\n"
+					+ "    }";
 		} else if (attachments != null) {
 			// Get the URL of the message attachment
 			String attachmentUrl = attachments.getJsonObject(0).getJsonObject("payload").getString("url");
@@ -56,7 +56,7 @@ public class EventHandlerImpl implements EventHandler {
 	@Override
 	public void handlePostback(String sender_psid, JsonObject received_postback) {
 		String jsonStr = "";
-		
+
 		log.info("handlePostback received_postback: " + received_postback);
 
 	}
@@ -68,14 +68,17 @@ public class EventHandlerImpl implements EventHandler {
 				+ "    },\r\n" + "    \"message\": " + response + "\r\n" + "  }";
 
 		// Send the HTTP request to the Messenger Platform
-		clientPool = WebClient.create(fbURL);
-		clientPool.query("access_token", FB_ACCESS_TOKEN);
-		clientPool.header("Content-Type", "application/json");
-		Response clientResponse = clientPool.post(new JsonObject(requestBody));
+		try {
+			clientPool = WebClient.create(fbURL);
+			clientPool.query("access_token", FB_ACCESS_TOKEN);
+			clientPool.header("Content-Type", "application/json");
+			Response clientResponse = clientPool.post(new JsonObject(requestBody));
+			log.info("Response message: " + clientResponse.readEntity(String.class));
+		} catch (Exception e) {
+			log.error("*** callSendAPI System Error: " + e);
+		}
 		log.info("FB_ACCESS_TOKEN: " + FB_ACCESS_TOKEN);
 		log.info("Request body" + new JsonObject(requestBody));
-		log.info("Response message: " + clientResponse.readEntity(String.class));
-		
 	}
 
 	@Override
