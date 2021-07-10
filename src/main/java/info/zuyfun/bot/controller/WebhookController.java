@@ -49,15 +49,18 @@ public class WebhookController {
 		// Checks this is an event from a page subscription
 		JsonObject objJson = new JsonObject(objReq);
 		String senderID = null;
+		String messageText = null;
 		if (objJson.getString("object", "").equals("page")) {
 
 			JsonArray objJsonArray = objJson.getJsonArray("entry");
 			for (int i = 0; i < objJsonArray.size(); i++) {
-				JsonObject objEntry = objJsonArray.getJsonObject(i);
-				senderID = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender").getString("id");
+				JsonObject objMessaging = objJsonArray.getJsonObject(i).getJsonArray("messaging").getJsonObject(0);
+				senderID = objMessaging.getJsonObject("sender").getString("id");
+				messageText = objMessaging.getJsonObject("message").getString("text");
 			}
 			log.info("JsonObject request: {}" + objReq);
 			log.info("JsonObject sender id: {}" + senderID);
+			log.info("JsonObject message text: {}" + messageText);
 			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>("NOT_FOUND", HttpStatus.NOT_FOUND);
