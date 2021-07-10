@@ -55,7 +55,9 @@ public class WebhookController {
 				JsonObject objEntry = objJsonArray.getJsonObject(i);
 				String senderID = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender")
 						.getString("id");
+
 				JsonObject message = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("message", null);
+				log.info("JsonObject message Object: {}" + message);
 				if (message != null) {
 					JsonObject postback = message.getJsonObject("attachments", null);
 					service.handleMessage(senderID, message);
