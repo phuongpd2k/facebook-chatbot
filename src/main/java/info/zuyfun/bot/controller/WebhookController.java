@@ -2,6 +2,7 @@ package info.zuyfun.bot.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import info.zuyfun.bot.dto.Messaging;
-import info.zuyfun.bot.dto.RequestObject;
+import info.zuyfun.bot.service.EventHandler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +21,9 @@ public class WebhookController {
 
 	@Value("${verify_token}")
 	private String VERIFY_TOKEN;
+
+	@Autowired
+	private EventHandler service;
 
 	@GetMapping("/webhook")
 	public ResponseEntity<Object> verifyWebhook(HttpServletRequest req) {
@@ -35,7 +37,6 @@ public class WebhookController {
 			// Checks the mode and token sent is correct
 			if (mode.equals("subscribe") && token.equals(VERIFY_TOKEN)) {
 				// Responds with the challenge token from the request
-//				      console.log('WEBHOOK_VERIFIED');
 				return new ResponseEntity<>(challenge, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>("FORBIDDEN", HttpStatus.FORBIDDEN);
@@ -56,13 +57,18 @@ public class WebhookController {
 			for (int i = 0; i < objJsonArray.size(); i++) {
 				JsonObject objEntry = objJsonArray.getJsonObject(i);
 				senderID = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender").getString("id");
-				messageText = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("message", null) == null
-						? ""
-						: objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("message")
-								.getString("text");
+				JsonObject message = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("message", null);
+
+//				  if (!messageText.isEmpty()) {
+//					    handleMessage(senderID, webhook_event.message);        
+//					  } else if (webhook_event.postback) {
+//					    handlePostback(senderID, webhook_event.postback);
+//					  }
 			}
+
 			log.info("JsonObject request: {}" + objReq);
 			log.info("JsonObject sender id: {}" + senderID);
+			log.info("JsonObject simsimi response: {}" + service.callSimsimi("hi"));
 			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>("NOT_FOUND", HttpStatus.NOT_FOUND);
