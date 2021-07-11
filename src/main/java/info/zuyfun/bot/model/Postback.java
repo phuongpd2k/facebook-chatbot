@@ -25,6 +25,8 @@ public class Postback implements Serializable {
 	private String tilte;
 	@JsonProperty("payload")
 	private Payload payload;
+	@JsonProperty("payload")
+	private String strPayload;
 	@JsonProperty("mid")
 	private String mid;
 
