@@ -20,7 +20,8 @@ public class Postback implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private String tilte;
 	private Payload payload;
-
+	private String mid;
 
 }
