@@ -21,6 +21,10 @@ public class Response implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@JsonProperty("recipient_id")
+	private String recipient_id;
+	@JsonProperty("message_id")
+	private String message_id;
 	@JsonProperty("error")
 	private Error error;
 }

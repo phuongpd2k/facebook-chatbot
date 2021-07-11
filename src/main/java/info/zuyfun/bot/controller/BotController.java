@@ -71,11 +71,9 @@ public class BotController {
 							logger.info("Callback/Event type not supported: {}", event);
 							return ResponseEntity.ok("Callback not supported yet!");
 						}
-						logger.info("Event type : {}", event);
 					}
 				}
 			}
-
 		} catch (Exception e) {
 			logger.error("Error in fb webhook: Callback: {} \nException: ", callback.toString(), e);
 		}

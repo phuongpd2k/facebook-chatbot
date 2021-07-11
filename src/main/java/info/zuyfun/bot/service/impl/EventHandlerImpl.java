@@ -99,7 +99,6 @@ public class EventHandlerImpl implements EventHandler {
 				}
 			}
 			callSendAPI(objRequest);
-			logger.info("FB_URL: {}", fbURLSender);
 		} catch (Exception e) {
 			logger.error("handleMessage - Exception: {}", e);
 		}
@@ -107,7 +106,6 @@ public class EventHandlerImpl implements EventHandler {
 
 	@Override
 	public void handlePostback(Event event) {
-		String jsonStr = "";
 
 		logger.info("handlePostback received_postback: ");
 
@@ -119,6 +117,7 @@ public class EventHandlerImpl implements EventHandler {
 		// Send the HTTP request to the Messenger Platform
 		try {
 			clientPool = WebClient.create(fbURLSender);
+			logger.info("Json Object request :", mapper.writeValueAsString(objRequest));
 			Response response = clientPool.post(mapper.writeValueAsString(objRequest));
 			String result = response.readEntity(String.class);
 			logger.info("Response Object {}", result);
