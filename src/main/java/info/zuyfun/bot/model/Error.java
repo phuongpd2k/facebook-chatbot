@@ -20,12 +20,12 @@ public class Error implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@JsonProperty("message")
 	private String message;
-	@JsonProperty("message")
+	@JsonProperty("type")
 	private String type;
-	@JsonProperty("message")
+	@JsonProperty("code")
 	private BigDecimal code;
-	@JsonProperty("message")
+	@JsonProperty("error_subcode")
 	private BigDecimal error_subcode;
-	@JsonProperty("message")
+	@JsonProperty("fbtrace_id")
 	private String fbtrace_id;
 }
