@@ -146,7 +146,7 @@ public class EventHandlerImpl implements EventHandler {
 			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
 			logger.info("Request Object {}", requestBody.getBody());
-			restTemplate.postForEntity(fbURLSender, requestBody, String.class);
+			restTemplate.postForObject(fbURLSender, requestBody, String.class);
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
@@ -158,8 +158,7 @@ public class EventHandlerImpl implements EventHandler {
 		logger.debug("***Call Simsimi");
 		String result = "";
 		try {
-			result = restTemplate.getForEntity(SIMSIMI_URL + "?text=" + messageText + "lang=vi_VN", String.class)
-					.getBody().toString();
+			result = restTemplate.getForObject(SIMSIMI_URL + "?text=" + messageText + "lang=vi_VN", String.class);
 
 			logger.info("Simsimi Data response {}", result);
 
