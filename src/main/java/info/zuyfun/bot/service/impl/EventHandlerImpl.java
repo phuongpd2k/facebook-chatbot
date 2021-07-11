@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
@@ -30,7 +29,7 @@ import info.zuyfun.bot.model.Response;
 import info.zuyfun.bot.model.Simsimi;
 import info.zuyfun.bot.service.EventHandler;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
 
 @Service
 public class EventHandlerImpl implements EventHandler {
@@ -47,7 +46,7 @@ public class EventHandlerImpl implements EventHandler {
 
 	@PostConstruct
 	public void eventHandleConstruct() {
-		fbURLSender += FB_ACCESS_TOKEN;
+//		fbURLSender += FB_ACCESS_TOKEN;
 //		mapper = new ObjectMapper();
 	}
 
