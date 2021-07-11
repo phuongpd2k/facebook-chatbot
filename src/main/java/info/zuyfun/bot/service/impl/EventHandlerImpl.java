@@ -45,6 +45,7 @@ public class EventHandlerImpl implements EventHandler {
 	@PostConstruct
 	public void EventHandlerImpl() {
 		mapper = new ObjectMapper();
+		fbURLSender += FB_ACCESS_TOKEN;
 	}
 
 	@Autowired
@@ -112,9 +113,10 @@ public class EventHandlerImpl implements EventHandler {
 		// Send the HTTP request to the Messenger Platform
 		try {
 
-			clientPool = WebClient.create(fbURLSender);
-			clientPool.query("access_token", FB_ACCESS_TOKEN);
-			clientPool.header("Content-Type", "application/json");
+			restTemplate.postForEntity(fbURLSender,
+					"{\r\n" + "    \"recipient\": {\r\n" + "        \"id\": 3956764507772140\r\n" + "    },\r\n"
+							+ "    \"message\": {\r\n" + "        \"text\": \"123\"\r\n" + "    }\r\n" + "}",
+					String.class);
 			Response clientResponse = clientPool.post(new JsonObject(mapper.writeValueAsString(objRequest)));
 			logger.info("Response message: " + clientResponse.readEntity(String.class));
 
