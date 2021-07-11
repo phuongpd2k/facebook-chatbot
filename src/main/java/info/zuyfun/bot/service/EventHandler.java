@@ -10,7 +10,7 @@ public interface EventHandler {
 	void handlePostback(Event event);
 
 	// Sends response messages via the Send API
-	void callSendAPI(String senderID, Object objRequest);
+	void callSendAPI(Object objRequest);
 
 	String callSimsimi(String messageText);
 }

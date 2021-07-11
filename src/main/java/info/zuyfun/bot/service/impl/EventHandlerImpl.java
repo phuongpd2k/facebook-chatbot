@@ -89,11 +89,12 @@ public class EventHandlerImpl implements EventHandler {
 					objButtons.get(1).setPayload("no");
 				}
 			}
+			callSendAPI(objRequestMessage);
 			logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
 			logger.info("FB_URL: {}", fbURLSender);
 			logger.info("Object request: {}", objRequest);
 		} catch (Exception e) {
-			logger.error("*** handleMessage System error: {}", e);
+			logger.error("handleMessage - Exception: {}", e);
 		}
 	}
 
@@ -106,9 +107,8 @@ public class EventHandlerImpl implements EventHandler {
 	}
 
 	@Override
-	public void callSendAPI(String sender_psid, Object objRequest) {
+	public void callSendAPI(Object objRequest) {
 		// Construct the message body
-
 		// Send the HTTP request to the Messenger Platform
 		try {
 			restTemplate.postForEntity(fbURLSender, objRequest, info.zuyfun.bot.model.Response.class);
@@ -120,16 +120,17 @@ public class EventHandlerImpl implements EventHandler {
 
 	@Override
 	public String callSimsimi(String messageText) {
+		logger.debug("***Call Simsimi");
 		String result = "";
 		try {
 			clientPool = WebClient.create(SIMSIMI_URL);
 			clientPool.query("text", messageText).query("lang", "vi_VN");
 			Response response = clientPool.get();
 			result = response.readEntity(String.class);
-			logger.info("*** Data response {}", result);
+			logger.info("Simsimi Data response {}", result);
 
 		} catch (Exception ex) {
-			logger.error("*** Lỗi hệ thống - Exception: {}", ex);
+			logger.error("callSimsimi - Exception: {}", ex);
 		}
 		return result;
 	}
