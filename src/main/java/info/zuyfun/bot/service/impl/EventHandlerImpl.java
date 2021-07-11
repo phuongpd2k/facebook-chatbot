@@ -14,10 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
@@ -28,11 +26,10 @@ import info.zuyfun.bot.model.Payload;
 import info.zuyfun.bot.model.Request;
 import info.zuyfun.bot.model.RequestMessage;
 import info.zuyfun.bot.model.RequestRecipient;
-import info.zuyfun.bot.model.Response;
+
 import info.zuyfun.bot.model.Simsimi;
 import info.zuyfun.bot.service.EventHandler;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @Service
 public class EventHandlerImpl implements EventHandler {
@@ -41,16 +38,13 @@ public class EventHandlerImpl implements EventHandler {
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
-	private static final String USER_AGENT = "WebClient for FlexiQuiz";
-	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages";
+	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages?access_token=";
 
-	private ObjectMapper mapper;
 	private WebClient webClient;
 
 	@PostConstruct
 	public void eventHandleConstruct() {
-//		fbURLSender += FB_ACCESS_TOKEN;
-		mapper = new ObjectMapper();
+		fbURLSender += FB_ACCESS_TOKEN;
 	}
 
 	@Autowired
