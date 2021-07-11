@@ -152,11 +152,11 @@ public class EventHandlerImpl implements EventHandler {
 //					.header("Content-Type", "application/json")
 //					.body(BodyInserters.fromPublisher(Flux.just(objRequest), Request.class)).retrieve()
 //					.bodyToFlux(String.class);
-			Flux<String> res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
+			String res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
 					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-					.body(Flux.just(objRequest), Request.class).retrieve().bodyToFlux(String.class);
+					.body(Mono.just(objRequest), Request.class).retrieve().bodyToMono(String.class).block();
 			logger.info("***Response: {}", res);
-			logger.info("***Response: {}", res.blockFirst());
+			logger.info("***Request Mono: {}", Mono.just(objRequest));
 //			HttpHeaders headers = new HttpHeaders();
 //			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
 //			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
