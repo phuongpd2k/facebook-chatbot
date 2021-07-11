@@ -118,8 +118,7 @@ public class EventHandlerImpl implements EventHandler {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		try {
-
-			clientPool = WebClient.create(SIMSIMI_URL);
+			clientPool = WebClient.create(fbURLSender);
 			Response response = clientPool.post(mapper.writeValueAsString(objRequest));
 			String result = response.readEntity(String.class);
 			logger.info("Response Object {}", result);
