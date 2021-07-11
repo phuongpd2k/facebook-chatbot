@@ -11,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -112,11 +115,11 @@ public class EventHandlerImpl implements EventHandler {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		try {
-
-			restTemplate.postForEntity(fbURLSender,
-					"{\r\n" + "    \"recipient\": {\r\n" + "        \"id\": 3956764507772140\r\n" + "    },\r\n"
-							+ "    \"message\": {\r\n" + "        \"text\": \"123\"\r\n" + "    }\r\n" + "}",
-					String.class);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
+			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
+			restTemplate.postForEntity(fbURLSender, requestBody, String.class);
 			Response clientResponse = clientPool.post(new JsonObject(mapper.writeValueAsString(objRequest)));
 			logger.info("Response message: " + clientResponse.readEntity(String.class));
 
