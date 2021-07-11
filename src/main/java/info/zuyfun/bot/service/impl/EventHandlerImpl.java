@@ -45,7 +45,7 @@ public class EventHandlerImpl implements EventHandler {
 	private ObjectMapper mapper;
 
 	@PostConstruct
-	public void EventHandlerImpl() {
+	public void eventHandleConstruct() {
 		fbURLSender += FB_ACCESS_TOKEN;
 		mapper = new ObjectMapper();
 	}
