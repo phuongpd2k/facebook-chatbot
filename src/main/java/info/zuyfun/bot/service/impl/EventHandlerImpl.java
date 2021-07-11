@@ -10,10 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
@@ -39,13 +42,13 @@ public class EventHandlerImpl implements EventHandler {
 	private static final String USER_AGENT = "WebClient for FlexiQuiz";
 	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages";
 
-//	private ObjectMapper mapper;
+	private ObjectMapper mapper;
 	private WebClient webClient;
 
 	@PostConstruct
 	public void eventHandleConstruct() {
 //		fbURLSender += FB_ACCESS_TOKEN;
-//		mapper = new ObjectMapper();
+		mapper = new ObjectMapper();
 	}
 
 	@Autowired
@@ -141,10 +144,11 @@ public class EventHandlerImpl implements EventHandler {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		logger.info("***Call API Facebook to sendMessage");
-
 		try {
 			webClient = WebClient.create(fbURLSender);
 			Flux<String> res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
+					.header("Content-Length", String.valueOf(mapper.writeValueAsString(objRequest).length()))
+					.header("Content-Type", "application/json")
 					.body(BodyInserters.fromPublisher(Flux.just(objRequest), Request.class)).retrieve()
 					.bodyToFlux(String.class);
 			logger.info("***Response: ", res.blockFirst());
