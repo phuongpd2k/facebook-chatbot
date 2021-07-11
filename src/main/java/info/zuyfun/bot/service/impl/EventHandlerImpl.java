@@ -157,13 +157,13 @@ public class EventHandlerImpl implements EventHandler {
 
 	@Override
 	public Simsimi callSimsimi(String messageText) {
-		logger.debug("***Call Simsimi");
+		logger.info("***Call Simsimi");
 		webClient = WebClient.create(SIMSIMI_URL);
 		Simsimi result = null;
 		try {
 			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "&lang=vi_VN").retrieve()
 					.bodyToFlux(Simsimi.class);
-			result=flux.blockFirst();
+			result = flux.blockFirst();
 			logger.info("Response Data response {}", result);
 
 		} catch (Exception ex) {
