@@ -123,10 +123,10 @@ public class EventHandlerImpl implements EventHandler {
 		objRequest.setRequestMessage(objRequestMessage);
 		switch (payload) {
 		case "yes":
-			objRequestMessage.setText("Thanks!");
+			objRequestMessage.setText("Cảm ơn!");
 			break;
 		case "no":
-			objRequestMessage.setText("Oops, try sending another image!");
+			objRequestMessage.setText("Oops, Hãy thử lại tấm ảnh khác!");
 			break;
 		default:
 			break;
