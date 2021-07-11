@@ -118,7 +118,8 @@ public class EventHandlerImpl implements EventHandler {
 		try {
 			clientPool = WebClient.create(fbURLSender);
 			logger.info("Json Object request :" + mapper.writeValueAsString(objRequest));
-			Response response = clientPool.post(mapper.writeValueAsString(objRequest));
+//			Response response = clientPool.post("{" + mapper.writeValueAsString(objRequest) + "}");
+			Response response = clientPool.post((Object) mapper.writeValueAsString(objRequest));
 			String result = response.readEntity(String.class);
 			logger.info("Response Object {}", result);
 		} catch (Exception e) {
