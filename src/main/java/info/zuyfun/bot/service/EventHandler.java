@@ -2,6 +2,7 @@ package info.zuyfun.bot.service;
 
 import info.zuyfun.bot.model.Event;
 import info.zuyfun.bot.model.Request;
+import info.zuyfun.bot.model.Simsimi;
 
 public interface EventHandler {
 	// Handles messages events
@@ -13,5 +14,5 @@ public interface EventHandler {
 	// Sends response messages via the Send API
 	void callSendAPI(Request objRequest);
 
-	String callSimsimi(String messageText);
+	Simsimi callSimsimi(String messageText);
 }

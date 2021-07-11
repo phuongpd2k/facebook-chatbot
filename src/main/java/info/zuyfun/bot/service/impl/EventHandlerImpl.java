@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.ws.rs.core.Response;
 
-import org.apache.cxf.jaxrs.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,8 +27,9 @@ import info.zuyfun.bot.model.Payload;
 import info.zuyfun.bot.model.Request;
 import info.zuyfun.bot.model.RequestMessage;
 import info.zuyfun.bot.model.RequestRecipient;
-import info.zuyfun.bot.model.SimsimiResponse;
+import info.zuyfun.bot.model.Simsimi;
 import info.zuyfun.bot.service.EventHandler;
+import reactor.core.publisher.Flux;
 
 @Service
 public class EventHandlerImpl implements EventHandler {
@@ -41,13 +41,13 @@ public class EventHandlerImpl implements EventHandler {
 
 	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages?access_token=";
 
-	private WebClient clientPool;
-	private ObjectMapper mapper;
+//	private ObjectMapper mapper;
+	private WebClient webClient;
 
 	@PostConstruct
 	public void eventHandleConstruct() {
 		fbURLSender += FB_ACCESS_TOKEN;
-		mapper = new ObjectMapper();
+//		mapper = new ObjectMapper();
 	}
 
 	@Autowired
@@ -69,7 +69,9 @@ public class EventHandlerImpl implements EventHandler {
 			logger.info("ObjMessage text: " + objMessage);
 			if (objMessage.getText() != null) {
 				// Object Message
-				SimsimiResponse simsimi = mapper.readValue(callSimsimi(objMessage.getText()), SimsimiResponse.class);
+				Simsimi simsimi = callSimsimi(objMessage.getText());
+				if (simsimi == null)
+					return;
 				objRequestMessage.setText(simsimi.getSuccess());
 			} else if (objMessage.getAttachments() != null || objMessage.getAttachments().isEmpty()) {
 				logger.info("Payload: object" + objMessage.getAttachments());
@@ -154,13 +156,16 @@ public class EventHandlerImpl implements EventHandler {
 	}
 
 	@Override
-	public String callSimsimi(String messageText) {
+	public Simsimi callSimsimi(String messageText) {
 		logger.debug("***Call Simsimi");
-		String result = "";
+		webClient = WebClient.create(SIMSIMI_URL);
+		Simsimi result = null;
 		try {
-			result = restTemplate.getForObject(SIMSIMI_URL + "?text=" + messageText + "lang=vi_VN", String.class);
+			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "lang=vi_VN").retrieve()
+					.bodyToFlux(Simsimi.class);
 
-			logger.info("Simsimi Data response {}", result);
+			logger.info("Flux Data response {}", flux);
+			logger.info("Flux First Data response {}", flux.blockFirst());
 
 		} catch (Exception ex) {
 			logger.error("callSimsimi - Exception: {}", ex);
