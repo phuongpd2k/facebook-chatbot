@@ -1,13 +1,14 @@
 package info.zuyfun.bot.service;
 
-import io.vertx.core.json.JsonObject;
+import info.zuyfun.bot.model.Event;
+
 
 public interface EventHandler {
 	// Handles messages events
-	void handleMessage(String sender_psid, JsonObject received_message);
+	void handleMessage(Event event);
 
 	// Handles messaging_postbacks events
-	void handlePostback(String sender_psid, JsonObject received_postback);
+	void handlePostback(Event event);
 
 	// Sends response messages via the Send API
 	void callSendAPI(String sender_psid, String response);
