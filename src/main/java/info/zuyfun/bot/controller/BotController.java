@@ -29,11 +29,6 @@ public class BotController {
 	@Autowired
 	private EventHandler service;
 
-	@RequestMapping("/")
-	public String index() {
-		return "index";
-	}
-
 	@GetMapping("/webhook")
 	public ResponseEntity<Object> verifyWebhook(HttpServletRequest req) {
 		// Parse the query params
