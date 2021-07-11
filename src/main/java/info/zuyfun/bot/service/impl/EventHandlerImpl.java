@@ -54,7 +54,7 @@ public class EventHandlerImpl implements EventHandler {
 			Request objRequest = new Request();
 
 			RequestRecipient objRequestRecipient = new RequestRecipient();
-			objRequestRecipient.setId(event.getRecipient().getId());
+			objRequestRecipient.setId(event.getSender().getId());
 			objRequest.setRequestRecipient(objRequestRecipient);
 
 			RequestMessage objRequestMessage = new RequestMessage();
@@ -91,6 +91,7 @@ public class EventHandlerImpl implements EventHandler {
 			}
 			logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
 			logger.info("FB_URL: {}", fbURLSender);
+			logger.info("Object request: {}", objRequest);
 		} catch (Exception e) {
 			logger.error("*** handleMessage System error: {}", e);
 		}
