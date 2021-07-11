@@ -9,12 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-
 
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
@@ -30,7 +29,6 @@ import info.zuyfun.bot.model.Simsimi;
 import info.zuyfun.bot.service.EventHandler;
 import reactor.core.publisher.Flux;
 
-
 @Service
 public class EventHandlerImpl implements EventHandler {
 	private static final Logger logger = LoggerFactory.getLogger(EventHandlerImpl.class);
@@ -38,7 +36,7 @@ public class EventHandlerImpl implements EventHandler {
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
-
+	private static final String USER_AGENT = "WebClient for FlexiQuiz";
 	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages";
 
 //	private ObjectMapper mapper;
@@ -147,7 +145,7 @@ public class EventHandlerImpl implements EventHandler {
 		try {
 			webClient = WebClient.create(fbURLSender);
 			Flux<Response> res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
-					.header("Content-Type", "application/json")
+					.defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT).header("Content-Type", "application/json")
 					.body(BodyInserters.fromPublisher(Flux.just(objRequest), Request.class)).retrieve()
 					.bodyToFlux(Response.class);
 			logger.info("***Response: ", res.blockFirst());
