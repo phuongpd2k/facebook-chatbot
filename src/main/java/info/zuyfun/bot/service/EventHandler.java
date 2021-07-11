@@ -1,6 +1,7 @@
 package info.zuyfun.bot.service;
 
 import info.zuyfun.bot.model.Event;
+import info.zuyfun.bot.model.Request;
 
 public interface EventHandler {
 	// Handles messages events

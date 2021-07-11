@@ -92,7 +92,7 @@ public class EventHandlerImpl implements EventHandler {
 					objButtons.get(1).setPayload("no");
 				}
 			}
-			callSendAPI(objRequestMessage);
+			callSendAPI(objRequest);
 			logger.info("FB_URL: {}", fbURLSender);
 		} catch (Exception e) {
 			logger.error("handleMessage - Exception: {}", e);
