@@ -56,9 +56,10 @@ public class EventHandlerImpl implements EventHandler {
 
 	@Override
 	public void handleMessage(Event event) {
+
 		try {
 			Message objMessage = event.getMessage();
-
+			logger.error("handleMessage - Object message: {}", objMessage);
 			Request objRequest = new Request();
 
 			RequestRecipient objRequestRecipient = new RequestRecipient();
