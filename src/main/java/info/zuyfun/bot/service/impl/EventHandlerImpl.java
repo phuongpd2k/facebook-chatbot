@@ -158,10 +158,9 @@ public class EventHandlerImpl implements EventHandler {
 		logger.debug("***Call Simsimi");
 		String result = "";
 		try {
-			clientPool = WebClient.create(SIMSIMI_URL);
-			clientPool.query("text", messageText).query("lang", "vi_VN");
-			Response response = clientPool.get();
-			result = response.readEntity(String.class);
+			result = restTemplate.getForEntity(SIMSIMI_URL + "?text=" + messageText + "lang=vi_VN", String.class)
+					.getBody().toString();
+
 			logger.info("Simsimi Data response {}", result);
 
 		} catch (Exception ex) {
