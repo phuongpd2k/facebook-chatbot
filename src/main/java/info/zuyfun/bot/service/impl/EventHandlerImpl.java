@@ -113,12 +113,11 @@ public class EventHandlerImpl implements EventHandler {
 	}
 
 	@Override
-	public void callSendAPI(Object objRequest) {
+	public void callSendAPI(Request objRequest) {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		try {
-			restTemplate.postForObject(fbURLSender, objRequest, Object.class);
-
+			restTemplate.postForObject(fbURLSender, objRequest, Request.class);
 			logger.info("Response Object {}", clientPool.getResponse());
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);

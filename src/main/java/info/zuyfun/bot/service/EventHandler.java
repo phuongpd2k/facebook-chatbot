@@ -11,7 +11,7 @@ public interface EventHandler {
 	void handlePostback(Event event);
 
 	// Sends response messages via the Send API
-	void callSendAPI(Object objRequest);
+	void callSendAPI(Request objRequest);
 
 	String callSimsimi(String messageText);
 }
