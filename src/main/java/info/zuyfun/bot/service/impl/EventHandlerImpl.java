@@ -147,16 +147,10 @@ public class EventHandlerImpl implements EventHandler {
 		logger.info("***Call API Facebook to sendMessage");
 		try {
 			webClient = WebClient.create(fbURLSender);
-//			Flux<String> res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
-//					.header("Content-Length", String.valueOf(mapper.writeValueAsString(objRequest).length()))
-//					.header("Content-Type", "application/json")
-//					.body(BodyInserters.fromPublisher(Flux.just(objRequest), Request.class)).retrieve()
-//					.bodyToFlux(String.class);
-			String res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
+
+			webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
 					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-					.body(Mono.just(objRequest), Request.class).retrieve().bodyToMono(String.class).block();
-			logger.info("***Response: {}", res);
-			logger.info("***Request Mono: {}", Mono.just(objRequest));
+					.body(Mono.just(objRequest), Request.class).retrieve().bodyToMono(String.class);
 //			HttpHeaders headers = new HttpHeaders();
 //			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
 //			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
