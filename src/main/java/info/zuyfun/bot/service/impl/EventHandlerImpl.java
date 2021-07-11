@@ -118,9 +118,11 @@ public class EventHandlerImpl implements EventHandler {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		try {
-			HttpEntity<String> request = new HttpEntity<String>(mapper.writeValueAsString(objRequest));
-			restTemplate.postForObject(fbURLSender, request, Request.class);
-			logger.info("Response Object {}", clientPool.getResponse());
+
+			clientPool = WebClient.create(SIMSIMI_URL);
+			Response response = clientPool.post(mapper.writeValueAsString(objRequest));
+			String result = response.readEntity(String.class);
+			logger.info("Response Object {}", result);
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
