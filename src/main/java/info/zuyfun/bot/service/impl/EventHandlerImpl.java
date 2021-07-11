@@ -161,7 +161,7 @@ public class EventHandlerImpl implements EventHandler {
 		webClient = WebClient.create(SIMSIMI_URL);
 		Simsimi result = null;
 		try {
-			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "lang=vi_VN").retrieve()
+			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "&lang=vi_VN").retrieve()
 					.bodyToFlux(Simsimi.class);
 			result=flux.blockFirst();
 			logger.info("Response Data response {}", result);
