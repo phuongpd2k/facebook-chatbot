@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
 import info.zuyfun.bot.model.Element;
@@ -26,6 +28,7 @@ import info.zuyfun.bot.model.Payload;
 import info.zuyfun.bot.model.Request;
 import info.zuyfun.bot.model.RequestMessage;
 import info.zuyfun.bot.model.RequestRecipient;
+import info.zuyfun.bot.model.SimsimiResponse;
 import info.zuyfun.bot.service.EventHandler;
 
 @Service
@@ -39,10 +42,12 @@ public class EventHandlerImpl implements EventHandler {
 	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages?access_token=";
 
 	private WebClient clientPool;
+	private ObjectMapper mapper;
 
 	@PostConstruct
 	public void EventHandlerImpl() {
 		fbURLSender += FB_ACCESS_TOKEN;
+		mapper = new ObjectMapper();
 	}
 
 	@Autowired
@@ -64,7 +69,8 @@ public class EventHandlerImpl implements EventHandler {
 			logger.info("ObjMessage text: " + objMessage);
 			if (objMessage.getText() != null) {
 				// Object Message
-				objRequestMessage.setText(objMessage.getText());
+				SimsimiResponse simsimi = mapper.readValue(callSimsimi(objMessage.getText()), SimsimiResponse.class);
+				objRequestMessage.setText(simsimi.getSuccess());
 			} else if (objMessage.getAttachments() != null || objMessage.getAttachments().isEmpty()) {
 				logger.info("Payload: object" + objMessage.getAttachments());
 				String attachmentUrl = objMessage.getAttachments().get(0).getPayload().getUrl();
