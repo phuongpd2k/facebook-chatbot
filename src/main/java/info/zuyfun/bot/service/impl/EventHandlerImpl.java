@@ -26,6 +26,7 @@ import info.zuyfun.bot.model.Payload;
 import info.zuyfun.bot.model.Request;
 import info.zuyfun.bot.model.RequestMessage;
 import info.zuyfun.bot.model.RequestRecipient;
+import info.zuyfun.bot.model.Response;
 import info.zuyfun.bot.model.Simsimi;
 import info.zuyfun.bot.service.EventHandler;
 import reactor.core.publisher.Flux;
@@ -142,10 +143,15 @@ public class EventHandlerImpl implements EventHandler {
 	public void callSendAPI(Request objRequest) {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
+		logger.info("***Call API Facebook to sendMessage");
+
 		try {
 			webClient = WebClient.create(fbURLSender);
-			webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN).header("Content-Type", "application/json")
-					.body(BodyInserters.fromPublisher(Flux.just(objRequest), Request.class));
+			Flux<Response> res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
+					.header("Content-Type", "application/json")
+					.body(BodyInserters.fromPublisher(Flux.just(objRequest), Request.class)).retrieve()
+					.bodyToFlux(Response.class);
+			logger.info("***Response: ", res.blockFirst());
 //			HttpHeaders headers = new HttpHeaders();
 //			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
 //			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
