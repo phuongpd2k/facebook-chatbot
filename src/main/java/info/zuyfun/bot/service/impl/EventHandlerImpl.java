@@ -65,6 +65,7 @@ public class EventHandlerImpl implements EventHandler {
 			objRequest.setRequestRecipient(objRequestRecipient);
 			RequestMessage objRequestMessage = new RequestMessage();
 			objRequest.setRequestMessage(objRequestMessage);
+			logger.info("Objmessage text: " + objMessage);
 			logger.info("Objmessage text: " + objMessage.getText());
 			if (objMessage == null) return;
 			if (!(objMessage.getText() == null) || !objMessage.getText().isEmpty()) {
