@@ -39,7 +39,7 @@ public class EventHandlerImpl implements EventHandler {
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
 
-	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages?access_token=";
+	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages";
 
 //	private ObjectMapper mapper;
 	private WebClient webClient;
@@ -143,12 +143,15 @@ public class EventHandlerImpl implements EventHandler {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
-			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
-			logger.info("Request Object {}", requestBody.getBody());
-			restTemplate.postForObject(fbURLSender, requestBody, String.class);
+			webClient = WebClient.create(fbURLSender);
+			webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN).header("Content-Type", "application/json")
+					.body(Flux.just(objRequest), String.class);
+//			HttpHeaders headers = new HttpHeaders();
+//			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
+//			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+//			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
+//			logger.info("Request Object {}", requestBody.getBody());
+//			restTemplate.postForObject(fbURLSender, requestBody, String.class);
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
