@@ -59,15 +59,14 @@ public class EventHandlerImpl implements EventHandler {
 
 		try {
 			Message objMessage = event.getMessage();
-			logger.error("handleMessage - Object message: {}", objMessage);
 			Request objRequest = new Request();
-
 			RequestRecipient objRequestRecipient = new RequestRecipient();
 			objRequestRecipient.setId(event.getSender().getId());
 			objRequest.setRequestRecipient(objRequestRecipient);
-
 			RequestMessage objRequestMessage = new RequestMessage();
 			objRequest.setRequestMessage(objRequestMessage);
+			if (objMessage == null)
+				return;
 			if (objMessage.getText() != null || !objMessage.getText().isEmpty()) {
 				// Object Message
 				objRequestMessage.setText(objMessage.getText());
