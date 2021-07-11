@@ -59,19 +59,20 @@ public class EventHandlerImpl implements EventHandler {
 
 		try {
 			Message objMessage = event.getMessage();
+			if (objMessage == null)
+				return;
 			Request objRequest = new Request();
 			RequestRecipient objRequestRecipient = new RequestRecipient();
 			objRequestRecipient.setId(event.getSender().getId());
 			objRequest.setRequestRecipient(objRequestRecipient);
 			RequestMessage objRequestMessage = new RequestMessage();
 			objRequest.setRequestMessage(objRequestMessage);
-			logger.info("Objmessage text: " + objMessage);
-			logger.info("Objmessage text: " + objMessage.getText());
-			if (objMessage == null) return;
-			if (!(objMessage.getText() == null) || !objMessage.getText().isEmpty()) {
+			logger.info("ObjMessage text: " + objMessage);
+			if (objMessage.getText() != null) {
 				// Object Message
 				objRequestMessage.setText(objMessage.getText());
 			} else if (objMessage.getAttachments() != null || objMessage.getAttachments().isEmpty()) {
+				logger.info("Payload: object" + objMessage.getAttachments());
 				String attachmentUrl = objMessage.getAttachments().get(0).getPayload().getUrl();
 				Attachment objAttachment = new Attachment();
 				Payload objPayload = new Payload();
