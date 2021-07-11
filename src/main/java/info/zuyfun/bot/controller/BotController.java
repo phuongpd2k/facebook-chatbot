@@ -59,12 +59,7 @@ public class BotController {
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {
 						if (event.getMessage() != null) {
-							// handleMessage of user
 							service.handleMessage(event);
-						} else if (event.getDelivery() != null) {
-							logger.info("event.getDelivery(): {}", event.getDelivery());
-						} else if (event.getRead() != null) {
-							logger.info("event.getRead(): {}", event.getRead());
 						} else if (event.getPostback() != null) {
 							logger.info("event.getPostback(): {}", event.getPostback());
 						} else {
@@ -77,7 +72,6 @@ public class BotController {
 		} catch (Exception e) {
 			logger.error("Error in fb webhook: Callback: {} \nException: ", callback.toString(), e);
 		}
-//		// fb advises to send a 200 response within 20 secs
 		return ResponseEntity.ok("EVENT_RECEIVED");
 	}
 

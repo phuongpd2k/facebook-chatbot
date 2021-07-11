@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -20,8 +21,11 @@ public class Postback implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@JsonProperty("tilte")
 	private String tilte;
+	@JsonProperty("payload")
 	private Payload payload;
+	@JsonProperty("mid")
 	private String mid;
 
 }
