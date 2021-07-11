@@ -31,6 +31,7 @@ import info.zuyfun.bot.model.Response;
 import info.zuyfun.bot.model.Simsimi;
 import info.zuyfun.bot.service.EventHandler;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class EventHandlerImpl implements EventHandler {
@@ -146,12 +147,15 @@ public class EventHandlerImpl implements EventHandler {
 		logger.info("***Call API Facebook to sendMessage");
 		try {
 			webClient = WebClient.create(fbURLSender);
-			Flux<String> res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
-					.header("Content-Length", String.valueOf(mapper.writeValueAsString(objRequest).length()))
-					.header("Content-Type", "application/json")
-					.body(BodyInserters.fromPublisher(Flux.just(objRequest), Request.class)).retrieve()
-					.bodyToFlux(String.class);
-			logger.info("***Response: ", res.blockFirst());
+//			Flux<String> res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
+//					.header("Content-Length", String.valueOf(mapper.writeValueAsString(objRequest).length()))
+//					.header("Content-Type", "application/json")
+//					.body(BodyInserters.fromPublisher(Flux.just(objRequest), Request.class)).retrieve()
+//					.bodyToFlux(String.class);
+			Mono<String> res = webClient.post().uri("/employees")
+					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+					.body(Mono.just(objRequest), Request.class).retrieve().bodyToMono(String.class);
+			logger.info("***Response: ", res);
 //			HttpHeaders headers = new HttpHeaders();
 //			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
 //			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
