@@ -34,6 +34,7 @@ public class EventHandlerImpl implements EventHandler {
 	public void handleMessage(Event event) {
 		try {
 			logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
+			logger.info("FB_URL: {}", fbURL);
 			restTemplate.postForEntity(fbURL,
 					new Event().setRecipient(event.getRecipient()).setSenderAction("typing_on"), Response.class);
 		} catch (
