@@ -144,10 +144,9 @@ public class EventHandlerImpl implements EventHandler {
 
 		try {
 			webClient = WebClient.create(fbURLSender);
-			Flux<Response> res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
-					.defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT).header("Content-Type", "application/json")
+			Flux<String> res = webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
 					.body(BodyInserters.fromPublisher(Flux.just(objRequest), Request.class)).retrieve()
-					.bodyToFlux(Response.class);
+					.bodyToFlux(String.class);
 			logger.info("***Response: ", res.blockFirst());
 //			HttpHeaders headers = new HttpHeaders();
 //			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
