@@ -116,9 +116,8 @@ public class EventHandlerImpl implements EventHandler {
 //			restTemplate.postForEntity(fbURLSender, objRequest, info.zuyfun.bot.model.Response.class);
 			clientPool.header("Content-Type", "application/json");
 			clientPool = WebClient.create(fbURLSender);
-			info.zuyfun.bot.model.Response objResponse = clientPool.post(objRequest)
-					.readEntity(info.zuyfun.bot.model.Response.class);
-			logger.info("Response Object {}", objResponse);
+			clientPool.post(objRequest);
+			logger.info("Response Object {}", clientPool.getResponse());
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
