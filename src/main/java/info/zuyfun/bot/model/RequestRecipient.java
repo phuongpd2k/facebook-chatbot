@@ -1,10 +1,11 @@
 package info.zuyfun.bot.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -15,14 +16,11 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class Delivery implements Serializable {
-
+public class RequestRecipient implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private List<String> mids;
-	private Long watermark;
-	private Integer seq;
-
+	@JsonProperty("id")
+	private BigDecimal id;
 }

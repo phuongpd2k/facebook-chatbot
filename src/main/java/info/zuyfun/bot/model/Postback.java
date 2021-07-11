@@ -1,34 +1,26 @@
 package info.zuyfun.bot.model;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
- * @author ramswaroop
- * @version 18/09/2016
+ * @author zuyfun
+ * @version 7/11/2021
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Postback {
+@Data
+public class Postback implements Serializable {
 
-    private String payload;
-    private Referral referral;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Payload payload;
 
-    public String getPayload() {
-        return payload;
-    }
 
-    public Postback setPayload(String payload) {
-        this.payload = payload;
-        return this;
-    }
-
-    public Referral getReferral() {
-        return referral;
-    }
-
-    public Postback setReferral(Referral referral) {
-        this.referral = referral;
-        return this;
-    }
 }

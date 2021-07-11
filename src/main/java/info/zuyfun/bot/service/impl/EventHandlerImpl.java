@@ -1,5 +1,9 @@
 package info.zuyfun.bot.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
 
@@ -11,7 +15,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import info.zuyfun.bot.model.Attachment;
+import info.zuyfun.bot.model.Button;
+import info.zuyfun.bot.model.Element;
 import info.zuyfun.bot.model.Event;
+import info.zuyfun.bot.model.Message;
+import info.zuyfun.bot.model.Payload;
+import info.zuyfun.bot.model.Request;
+import info.zuyfun.bot.model.RequestMessage;
+import info.zuyfun.bot.model.RequestRecipient;
 import info.zuyfun.bot.service.EventHandler;
 
 @Service
@@ -22,9 +34,14 @@ public class EventHandlerImpl implements EventHandler {
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
 
-	private String fbURL = "https://graph.facebook.com/v2.6/me/messages?access_token=";
+	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages?access_token=";
 
 	private WebClient clientPool;
+
+	@PostConstruct
+	public void EventHandlerImpl() {
+		fbURLSender += FB_ACCESS_TOKEN;
+	}
 
 	@Autowired
 	protected RestTemplate restTemplate;
@@ -32,14 +49,49 @@ public class EventHandlerImpl implements EventHandler {
 	@Override
 	public void handleMessage(Event event) {
 		try {
-			fbURL += FB_ACCESS_TOKEN;
-			logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
-			logger.info("FB_URL: {}", fbURL);
-			restTemplate.postForEntity(fbURL,
-					new Event().setRecipient(event.getRecipient()).setSenderAction("typing_on"), Response.class);
-		} catch (
+			Message objMessage = event.getMessage();
 
-		Exception e) {
+			Request objRequest = new Request();
+
+			RequestRecipient objRequestRecipient = new RequestRecipient();
+			objRequestRecipient.setId(event.getRecipient().getId());
+			objRequest.setRequestRecipient(objRequestRecipient);
+
+			RequestMessage objRequestMessage = new RequestMessage();
+
+			if (objMessage.getText() != null || !objMessage.getText().isEmpty()) {
+				// Object Message
+				objRequestMessage.setText(objMessage.getText());
+			} else if (objMessage.getAttachments() != null || objMessage.getAttachments().isEmpty()) {
+				String attachmentUrl = objMessage.getAttachments().get(0).getPayload().getUrl();
+				Attachment objAttachment = new Attachment();
+				Payload objPayload = new Payload();
+				List<Element> objElements = new ArrayList<Element>();
+				List<Button> objButtons = new ArrayList<Button>();
+				// Object message
+				objRequestMessage.setAttachment(objAttachment);
+				// Type
+				objAttachment.setType("template");
+				// Payload
+				objPayload.setTemplateType("generic");
+				objPayload.setElements(objElements);
+				// Element
+				for (Element element : objElements) {
+					element.setTitle("Is this the right picture?");
+					element.setSubtitle("Tap a button to answer.");
+					element.setImageUrl(attachmentUrl);
+					element.setButtons(objButtons);
+					objButtons.get(0).setType("postback");
+					objButtons.get(0).setTitle("Yes!");
+					objButtons.get(0).setPayload("yes");
+					objButtons.get(1).setType("postback");
+					objButtons.get(1).setTitle("No!");
+					objButtons.get(1).setPayload("no");
+				}
+			}
+			logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
+			logger.info("FB_URL: {}", fbURLSender);
+		} catch (Exception e) {
 			logger.error("*** handleMessage System error: {}", e);
 		}
 	}
@@ -53,23 +105,16 @@ public class EventHandlerImpl implements EventHandler {
 	}
 
 	@Override
-	public void callSendAPI(String sender_psid, String response) {
+	public void callSendAPI(String sender_psid, Object objRequest) {
 		// Construct the message body
-		String requestBody = "{\r\n" + "    \"recipient\": {\r\n" + "      \"id\": " + sender_psid + "\r\n"
-				+ "    },\r\n" + "    \"message\": " + response + "\r\n" + "  }";
 
 		// Send the HTTP request to the Messenger Platform
 		try {
-			clientPool = WebClient.create(fbURL);
-			clientPool.query("access_token", FB_ACCESS_TOKEN);
-			clientPool.header("Content-Type", "application/json");
-			Response clientResponse = clientPool.post((Object) requestBody);
-			logger.info("Response message: {}", clientResponse.readEntity(String.class));
+			restTemplate.postForEntity(fbURLSender, objRequest, info.zuyfun.bot.model.Response.class);
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
 		logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
-		logger.info("request body: {}", requestBody);
 	}
 
 	@Override

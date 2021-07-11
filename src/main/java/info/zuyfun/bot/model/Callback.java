@@ -2,47 +2,27 @@ package info.zuyfun.bot.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.Data;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * @author ramswaroop
- * @version 31/07/2017
+ * @author zuyfun
+ * @version 7/11/2021
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Callback {
+@Data
+public class Callback implements Serializable {
 
-    private static final Logger logger = LoggerFactory.getLogger(Callback.class);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private String object;
-    private Entry[] entry;
+	private String object;
+	private List<Entry> entry;
 
-    public String getObject() {
-        return object;
-    }
-
-    public void setObject(String object) {
-        this.object = object;
-    }
-
-    public Entry[] getEntry() {
-        return entry;
-    }
-
-    public void setEntry(Entry[] entry) {
-        this.entry = entry;
-    }
-
-    @Override
-    public String toString() {
-        try {
-            return new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            logger.error("Error serializing Callback: {}", e);
-            return "";
-        }
-    }
 }

@@ -1,28 +1,31 @@
 package info.zuyfun.bot.model;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
-/**
- * @author zuyfun
- * @version 7/11/2021
- */
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class Response implements Serializable {
+public class Error implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@JsonProperty("recipient_id")
-	private String recipientId;
-	@JsonProperty("message_id")
-	private String messageId;
+	@JsonProperty("message")
+	private String message;
+	@JsonProperty("message")
+	private String type;
+	@JsonProperty("message")
+	private BigDecimal code;
+	@JsonProperty("message")
+	private BigDecimal error_subcode;
+	@JsonProperty("message")
+	private String fbtrace_id;
 }

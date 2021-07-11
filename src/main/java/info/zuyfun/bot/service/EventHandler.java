@@ -2,7 +2,6 @@ package info.zuyfun.bot.service;
 
 import info.zuyfun.bot.model.Event;
 
-
 public interface EventHandler {
 	// Handles messages events
 	void handleMessage(Event event);
@@ -11,7 +10,7 @@ public interface EventHandler {
 	void handlePostback(Event event);
 
 	// Sends response messages via the Send API
-	void callSendAPI(String sender_psid, String response);
+	void callSendAPI(String senderID, Object objRequest);
 
 	String callSimsimi(String messageText);
 }

@@ -1,41 +1,27 @@
 package info.zuyfun.bot.model;
 
+import java.io.Serializable;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
- * @author ramswaroop
- * @version 09/10/2016
+ * @author zuyfun
+ * @version 7/11/2021
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Entry {
-    
-    private String id;
-    private Long time;
-    private Event[] messaging;
+@Data
+public class Entry implements Serializable {
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Long getTime() {
-        return time;
-    }
-
-    public void setTime(Long time) {
-        this.time = time;
-    }
-
-    public Event[] getMessaging() {
-        return messaging;
-    }
-
-    public void setMessaging(Event[] messaging) {
-        this.messaging = messaging;
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String id;
+	private Long time;
+	private List<Event> messaging;
 }

@@ -1,34 +1,26 @@
 package info.zuyfun.bot.model;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
- * @author ramswaroop
- * @version 01/01/2017
+ * @author zuyfun
+ * @version 7/11/2021
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Field {
+@Data
+public class Field implements Serializable{
     
-    private String label;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String label;
     private String value;
 
-    public String getLabel() {
-        return label;
-    }
-
-    public Field setLabel(String label) {
-        this.label = label;
-        return this;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public Field setValue(String value) {
-        this.value = value;
-        return this;
-    }
 }
