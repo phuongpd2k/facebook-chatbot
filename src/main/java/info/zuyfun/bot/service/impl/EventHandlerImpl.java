@@ -81,10 +81,13 @@ public class EventHandlerImpl implements EventHandler {
 				objPayload.setTemplateType("generic");
 				objPayload.setElements(objElements);
 				// Element
+				objElements.add(new Element());
 				objElements.get(0).setTitle("Is this the right picture?");
 				objElements.get(0).setSubtitle("Tap a button to answer.");
 				objElements.get(0).setImageUrl(attachmentUrl);
 				objElements.get(0).setButtons(objButtons);
+				objButtons.add(new Button());
+				objButtons.add(new Button());
 				objButtons.get(0).setType("postback");
 				objButtons.get(0).setTitle("Yes!");
 				objButtons.get(0).setPayload("yes");
