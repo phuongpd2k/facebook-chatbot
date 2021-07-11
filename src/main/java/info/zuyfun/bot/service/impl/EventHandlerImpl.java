@@ -1,9 +1,7 @@
 package info.zuyfun.bot.service.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
@@ -13,12 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
@@ -48,7 +44,6 @@ public class EventHandlerImpl implements EventHandler {
 
 	@PostConstruct
 	public void EventHandlerImpl() {
-		fbURLSender += FB_ACCESS_TOKEN;
 		mapper = new ObjectMapper();
 	}
 
@@ -116,12 +111,13 @@ public class EventHandlerImpl implements EventHandler {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		try {
-			clientPool = WebClient.create(fbURLSender);
-			logger.info("Json Object request :" + mapper.writeValueAsString(objRequest));
-			Response response = clientPool.post("{" + mapper.writeValueAsString(objRequest) + "}");
 
-			String result = response.readEntity(String.class);
-			logger.info("Response Object {}", result);
+			clientPool = WebClient.create(fbURLSender);
+			clientPool.query("access_token", FB_ACCESS_TOKEN);
+			clientPool.header("Content-Type", "application/json");
+			Response clientResponse = clientPool.post(new JsonObject(mapper.writeValueAsString(objRequest)));
+			logger.info("Response message: " + clientResponse.readEntity(String.class));
+
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
