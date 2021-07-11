@@ -113,7 +113,11 @@ public class EventHandlerImpl implements EventHandler {
 		// Send the HTTP request to the Messenger Platform
 		try {
 			logger.info("Request Object {}", new ObjectMapper().writeValueAsString(objRequest));
-			restTemplate.postForEntity(fbURLSender, objRequest, info.zuyfun.bot.model.Response.class);
+//			restTemplate.postForEntity(fbURLSender, objRequest, info.zuyfun.bot.model.Response.class);
+			clientPool = WebClient.create(fbURLSender);
+			info.zuyfun.bot.model.Response objResponse = clientPool.post(objRequest)
+					.readEntity(info.zuyfun.bot.model.Response.class);
+			logger.info("Response Object {}", objResponse);
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
