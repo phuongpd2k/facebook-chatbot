@@ -17,8 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
 import info.zuyfun.bot.model.Element;
@@ -29,7 +27,6 @@ import info.zuyfun.bot.model.Request;
 import info.zuyfun.bot.model.RequestMessage;
 import info.zuyfun.bot.model.RequestRecipient;
 import info.zuyfun.bot.service.EventHandler;
-import io.vertx.core.json.JsonObject;
 
 @Service
 public class EventHandlerImpl implements EventHandler {
@@ -43,11 +40,8 @@ public class EventHandlerImpl implements EventHandler {
 
 	private WebClient clientPool;
 
-	private ObjectMapper mapper;
-
 	@PostConstruct
 	public void EventHandlerImpl() {
-		mapper = new ObjectMapper();
 		fbURLSender += FB_ACCESS_TOKEN;
 	}
 
@@ -121,6 +115,7 @@ public class EventHandlerImpl implements EventHandler {
 			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
 			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
+			logger.info("Request Object {}", requestBody.getBody());
 			restTemplate.postForEntity(fbURLSender, requestBody, String.class);
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
