@@ -21,8 +21,8 @@ public class Postback implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@JsonProperty("tilte")
-	private String tilte;
+	@JsonProperty("title")
+	private String title;
 	@JsonProperty("payload")
 	private String payload;
 	@JsonProperty("mid")
