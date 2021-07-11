@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 import info.zuyfun.bot.model.Event;
 import info.zuyfun.bot.service.EventHandler;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 public class EventHandlerImpl implements EventHandler {
@@ -27,16 +26,13 @@ public class EventHandlerImpl implements EventHandler {
 
 	private WebClient clientPool;
 
-	public EventHandlerImpl() {
-		fbURL += FB_ACCESS_TOKEN;
-	}
-
 	@Autowired
 	protected RestTemplate restTemplate;
 
 	@Override
 	public void handleMessage(Event event) {
 		try {
+			fbURL += FB_ACCESS_TOKEN;
 			logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
 			logger.info("FB_URL: {}", fbURL);
 			restTemplate.postForEntity(fbURL,
