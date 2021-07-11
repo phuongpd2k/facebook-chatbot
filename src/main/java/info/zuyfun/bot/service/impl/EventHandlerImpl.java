@@ -25,8 +25,8 @@ public class EventHandlerImpl implements EventHandler {
 
 	private WebClient clientPool;
 
-	@Autowired
-    protected RestTemplate restTemplate;
+//	@Autowired
+//    protected RestTemplate restTemplate;
 	
 	@Override
 	public void handleMessage(String sender_psid, JsonObject received_message) {
