@@ -76,6 +76,7 @@ public class EventHandlerImpl implements EventHandler {
 				objRequestMessage.setAttachment(objAttachment);
 				// Type
 				objAttachment.setType("template");
+				objAttachment.setPayload(objPayload);
 				// Payload
 				objPayload.setTemplateType("generic");
 				objPayload.setElements(objElements);
