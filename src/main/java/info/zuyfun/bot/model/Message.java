@@ -32,9 +32,9 @@ public class Message implements Serializable {
 	private String text;
 	private Attachment attachment;
 	private List<Attachment> attachments;
-	@JsonProperty("quick_reply")
-	private Button quickReply;
-	@JsonProperty("quick_replies")
-	private List<Button> quickReplies;
+//	@JsonProperty("quick_reply")
+//	private Button quickReply;
+//	@JsonProperty("quick_replies")
+//	private List<Button> quickReplies;
 
 }
