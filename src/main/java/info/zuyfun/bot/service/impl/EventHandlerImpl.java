@@ -81,18 +81,16 @@ public class EventHandlerImpl implements EventHandler {
 				objPayload.setTemplateType("generic");
 				objPayload.setElements(objElements);
 				// Element
-				for (Element element : objElements) {
-					element.setTitle("Is this the right picture?");
-					element.setSubtitle("Tap a button to answer.");
-					element.setImageUrl(attachmentUrl);
-					element.setButtons(objButtons);
-					objButtons.get(0).setType("postback");
-					objButtons.get(0).setTitle("Yes!");
-					objButtons.get(0).setPayload("yes");
-					objButtons.get(1).setType("postback");
-					objButtons.get(1).setTitle("No!");
-					objButtons.get(1).setPayload("no");
-				}
+				objElements.get(0).setTitle("Is this the right picture?");
+				objElements.get(0).setSubtitle("Tap a button to answer.");
+				objElements.get(0).setImageUrl(attachmentUrl);
+				objElements.get(0).setButtons(objButtons);
+				objButtons.get(0).setType("postback");
+				objButtons.get(0).setTitle("Yes!");
+				objButtons.get(0).setPayload("yes");
+				objButtons.get(1).setType("postback");
+				objButtons.get(1).setTitle("No!");
+				objButtons.get(1).setPayload("no");
 			}
 			callSendAPI(objRequest);
 		} catch (Exception e) {
