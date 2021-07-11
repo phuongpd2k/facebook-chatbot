@@ -65,11 +65,16 @@ public class EventHandlerImpl implements EventHandler {
 			objRequest.setRequestMessage(objRequestMessage);
 			logger.info("ObjMessage text: " + objMessage);
 			if (objMessage.getText() != null) {
+				String messageText = objMessage.getText();
 				// Object Message
-				Simsimi simsimi = callSimsimi(objMessage.getText());
-				if (simsimi == null)
-					return;
-				objRequestMessage.setText(simsimi.getSuccess());
+				if (messageText.contains("/ssm")) {
+					Simsimi simsimi = callSimsimi(messageText);
+					if (simsimi == null)
+						return;
+					objRequestMessage.setText(simsimi.getSuccess());
+				} else {
+					objRequestMessage.setText(messageText);
+				}
 			} else if (objMessage.getAttachments() != null || objMessage.getAttachments().isEmpty()) {
 				logger.info("Payload: object" + objMessage.getAttachments());
 				String attachmentUrl = objMessage.getAttachments().get(0).getPayload().getUrl();
