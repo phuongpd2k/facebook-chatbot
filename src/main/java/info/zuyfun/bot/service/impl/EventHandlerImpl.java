@@ -119,10 +119,8 @@ public class EventHandlerImpl implements EventHandler {
 			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
 			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
-			restTemplate.postForEntity(fbURLSender, requestBody, String.class);
-			Response clientResponse = clientPool.post(new JsonObject(mapper.writeValueAsString(objRequest)));
-			logger.info("Response message: " + clientResponse.readEntity(String.class));
-
+			String a = restTemplate.postForEntity(fbURLSender, requestBody, String.class).toString();
+			logger.info("Response : " + a);
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
