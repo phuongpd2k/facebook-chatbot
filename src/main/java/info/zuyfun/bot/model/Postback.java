@@ -23,7 +23,7 @@ public class Postback implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@JsonProperty("tilte")
 	private String tilte;
-	@JsonProperty("payload")
+	@JsonProperty("payload1")
 	private Payload payload;
 	@JsonProperty("payload")
 	private String strPayload;
