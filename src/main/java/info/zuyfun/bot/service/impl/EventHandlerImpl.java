@@ -112,6 +112,28 @@ public class EventHandlerImpl implements EventHandler {
 
 		logger.info("handlePostback received_postback: ");
 
+		// Get the payload for the postback
+		String payload = event.getPostback().getPayload();
+		// Set the response based on the postback payload
+		Request objRequest = new Request();
+		RequestRecipient objRequestRecipient = new RequestRecipient();
+		objRequestRecipient.setId(event.getSender().getId());
+		objRequest.setRequestRecipient(objRequestRecipient);
+		RequestMessage objRequestMessage = new RequestMessage();
+		objRequest.setRequestMessage(objRequestMessage);
+		switch (payload) {
+		case "yes":
+			objRequestMessage.setText("Thanks!");
+			break;
+		case "no":
+			objRequestMessage.setText("Oops, try sending another image!");
+			break;
+		default:
+			break;
+		}
+
+		callSendAPI(objRequest);
+
 	}
 
 	@Override
