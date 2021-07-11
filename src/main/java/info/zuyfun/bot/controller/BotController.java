@@ -62,6 +62,7 @@ public class BotController {
 							service.handleMessage(event);
 						} else if (event.getPostback() != null) {
 							logger.info("event.getPostback(): {}", event.getPostback());
+							service.handlePostback(event);
 						} else {
 							logger.info("Callback/Event type not supported: {}", event);
 							return ResponseEntity.ok("Callback not supported yet!");
