@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.client.WebClient;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,9 +93,7 @@ public class EventHandlerImpl implements EventHandler {
 				}
 			}
 			callSendAPI(objRequestMessage);
-			logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
 			logger.info("FB_URL: {}", fbURLSender);
-			logger.info("Object request: {}", objRequest);
 		} catch (Exception e) {
 			logger.error("handleMessage - Exception: {}", e);
 		}
@@ -115,12 +112,12 @@ public class EventHandlerImpl implements EventHandler {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		try {
-			restTemplate.postForEntity(fbURLSender, new ObjectMapper().writeValueAsString(objRequest),
-					info.zuyfun.bot.model.Response.class);
+			restTemplate.postForEntity(fbURLSender, objRequest, info.zuyfun.bot.model.Response.class);
+			logger.info("Request Object", new ObjectMapper().writeValueAsString(objRequest));
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
-		logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
+
 	}
 
 	@Override
