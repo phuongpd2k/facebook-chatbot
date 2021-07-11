@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -146,17 +147,12 @@ public class EventHandlerImpl implements EventHandler {
 		// Send the HTTP request to the Messenger Platform
 		logger.info("***Call API Facebook to sendMessage");
 		try {
-			webClient = WebClient.create(fbURLSender);
-
-			webClient.post().uri("?access_token=" + FB_ACCESS_TOKEN)
-					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-					.body(Mono.just(objRequest), Request.class).retrieve().bodyToMono(String.class);
-//			HttpHeaders headers = new HttpHeaders();
-//			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
-//			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-//			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
-//			logger.info("Request Object {}", requestBody.getBody());
-//			restTemplate.postForObject(fbURLSender, requestBody, String.class);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
+			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
+			logger.info("Request Object {}", requestBody.getBody());
+			restTemplate.postForObject(fbURLSender, requestBody, String.class);
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
