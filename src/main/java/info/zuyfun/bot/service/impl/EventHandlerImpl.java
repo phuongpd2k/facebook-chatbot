@@ -38,7 +38,7 @@ public class EventHandlerImpl implements EventHandler {
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
-	private String fbURLSender = "https://graph.facebook.com/v2.6/me/messages?access_token=";
+	private String fbURLSender = "https://graph.facebook.com/v11.0/me/messages?access_token=";
 
 	private WebClient webClient;
 
@@ -160,7 +160,7 @@ public class EventHandlerImpl implements EventHandler {
 		try {
 			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "&lang=vi_VN").retrieve()
 					.bodyToFlux(Simsimi.class);
-			result = flux.blockFirst();
+			result = flux.blockFirst() == null ? null : flux.blockFirst();
 			logger.info("Response Data response {}", result);
 
 		} catch (Exception ex) {
