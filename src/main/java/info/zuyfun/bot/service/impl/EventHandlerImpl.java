@@ -8,12 +8,16 @@ import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
@@ -111,7 +115,8 @@ public class EventHandlerImpl implements EventHandler {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		try {
-			restTemplate.postForEntity(fbURLSender, objRequest, info.zuyfun.bot.model.Response.class);
+			restTemplate.postForEntity(fbURLSender, new ObjectMapper().writeValueAsString(objRequest),
+					info.zuyfun.bot.model.Response.class);
 		} catch (Exception e) {
 			logger.error("*** callSendAPI System Error: " + e);
 		}
