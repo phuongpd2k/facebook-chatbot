@@ -128,6 +128,7 @@ public class EventHandlerImpl implements EventHandler {
 			objRequestMessage.setText("Oops, Hãy thử lại tấm ảnh khác!");
 			break;
 		default:
+			objRequestMessage.setText("Oops!!!");
 			break;
 		}
 
