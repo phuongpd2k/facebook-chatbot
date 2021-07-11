@@ -3,6 +3,8 @@ package info.zuyfun.bot.service.impl;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,8 +15,9 @@ import info.zuyfun.bot.service.EventHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 public class EventHandlerImpl implements EventHandler {
+	private static final Logger logger = LoggerFactory.getLogger(EventHandlerImpl.class);
+
 	@Value("${fb_access_token}")
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
@@ -30,12 +33,13 @@ public class EventHandlerImpl implements EventHandler {
 	@Override
 	public void handleMessage(Event event) {
 		try {
+			logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
 			restTemplate.postForEntity(fbURL,
 					new Event().setRecipient(event.getRecipient()).setSenderAction("typing_on"), Response.class);
 		} catch (
 
 		Exception e) {
-			log.error("*** handleMessage System error: " + e);
+			logger.error("*** handleMessage System error: {}", e);
 		}
 	}
 
@@ -43,7 +47,7 @@ public class EventHandlerImpl implements EventHandler {
 	public void handlePostback(Event event) {
 		String jsonStr = "";
 
-		log.info("handlePostback received_postback: ");
+		logger.info("handlePostback received_postback: ");
 
 	}
 
@@ -59,12 +63,12 @@ public class EventHandlerImpl implements EventHandler {
 			clientPool.query("access_token", FB_ACCESS_TOKEN);
 			clientPool.header("Content-Type", "application/json");
 			Response clientResponse = clientPool.post((Object) requestBody);
-			log.info("Response message: " + clientResponse.readEntity(String.class));
+			logger.info("Response message: {}", clientResponse.readEntity(String.class));
 		} catch (Exception e) {
-			log.error("*** callSendAPI System Error: " + e);
+			logger.error("*** callSendAPI System Error: " + e);
 		}
-		log.info("FB_ACCESS_TOKEN: " + FB_ACCESS_TOKEN);
-		log.info("request body: " + requestBody);
+		logger.info("FB_ACCESS_TOKEN: {}", FB_ACCESS_TOKEN);
+		logger.info("request body: {}", requestBody);
 	}
 
 	@Override
@@ -75,10 +79,10 @@ public class EventHandlerImpl implements EventHandler {
 			clientPool.query("text", messageText).query("lang", "vi_VN");
 			Response response = clientPool.get();
 			result = response.readEntity(String.class);
-			log.info("*** Data response " + result);
+			logger.info("*** Data response {}", result);
 
 		} catch (Exception ex) {
-			log.error("*** Lỗi hệ thống - Exception: " + ex);
+			logger.error("*** Lỗi hệ thống - Exception: {}", ex);
 		}
 		return result;
 	}
