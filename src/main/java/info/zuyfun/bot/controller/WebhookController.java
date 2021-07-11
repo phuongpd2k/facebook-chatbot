@@ -54,17 +54,16 @@ public class WebhookController {
 			JsonArray objJsonArray = objJson.getJsonArray("entry");
 
 			JsonObject objEntry = objJsonArray.getJsonObject(0);
-			String senderID = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("sender")
-					.getString("id");
-			JsonObject message = objEntry.getJsonArray("messaging").getJsonObject(0).getJsonObject("message", null);
-			if (message != null && !senderID.equals("102246545033338")) {
+			JsonObject objMessaging = objEntry.getJsonArray("messaging").getJsonObject(0);
+			String senderID = objMessaging.getJsonObject("sender").getString("id");
+			JsonObject message = objMessaging.getJsonObject("message", null);
+			if (message != null) {
 				JsonObject postback = message.getJsonObject("attachments", null);
 				service.handleMessage(senderID, message);
 				if (postback != null) {
 					service.handlePostback(senderID, postback);
 				}
 			}
-
 			return new ResponseEntity<>("EVENT_RECEIVED", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>("NOT_FOUND", HttpStatus.NOT_FOUND);
