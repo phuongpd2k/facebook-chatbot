@@ -68,7 +68,7 @@ public class EventHandlerImpl implements EventHandler {
 				String messageText = objMessage.getText();
 				// Object Message
 				if (messageText.contains("/ssm")) {
-					Simsimi simsimi = callSimsimi(messageText);
+					Simsimi simsimi = callSimsimi(messageText.replace("/ssm ", ""));
 					if (simsimi == null)
 						return;
 					objRequestMessage.setText(simsimi.getSuccess());
