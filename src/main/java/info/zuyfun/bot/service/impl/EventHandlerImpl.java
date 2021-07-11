@@ -163,9 +163,8 @@ public class EventHandlerImpl implements EventHandler {
 		try {
 			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "lang=vi_VN").retrieve()
 					.bodyToFlux(Simsimi.class);
-
-			logger.info("Flux Data response {}", flux);
-			logger.info("Flux First Data response {}", flux.blockFirst());
+			result=flux.blockFirst();
+			logger.info("Response Data response {}", result);
 
 		} catch (Exception ex) {
 			logger.error("callSimsimi - Exception: {}", ex);
