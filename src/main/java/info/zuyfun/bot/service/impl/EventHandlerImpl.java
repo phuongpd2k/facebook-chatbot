@@ -1,5 +1,6 @@
 package info.zuyfun.bot.service.impl;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -17,15 +18,18 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class EventHandlerImpl implements EventHandler {
 	private static final Logger logger = LoggerFactory.getLogger(EventHandlerImpl.class);
-
 	@Value("${fb_access_token}")
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
 
-	private final String fbURL = "https://graph.facebook.com/v2.6/me/messages?access_token=" + FB_ACCESS_TOKEN;
+	private String fbURL = "https://graph.facebook.com/v2.6/me/messages?access_token=";
 
 	private WebClient clientPool;
+
+	public EventHandlerImpl() {
+		fbURL += FB_ACCESS_TOKEN;
+	}
 
 	@Autowired
 	protected RestTemplate restTemplate;
