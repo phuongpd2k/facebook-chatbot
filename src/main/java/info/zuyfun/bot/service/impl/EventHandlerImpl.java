@@ -3,8 +3,10 @@ package info.zuyfun.bot.service.impl;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import info.zuyfun.bot.service.EventHandler;
 import io.vertx.core.json.JsonArray;
@@ -23,6 +25,9 @@ public class EventHandlerImpl implements EventHandler {
 
 	private WebClient clientPool;
 
+	@Autowired
+    protected RestTemplate restTemplate;
+	
 	@Override
 	public void handleMessage(String sender_psid, JsonObject received_message) {
 		try {
