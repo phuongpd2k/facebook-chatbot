@@ -1,6 +1,5 @@
 package info.zuyfun.bot.controller;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -48,36 +47,39 @@ public class BotController {
 
 	@ResponseBody
 	@PostMapping("/webhook")
-	public ResponseEntity<Object> webhookEndpoint(@RequestBody Callback callback) {
-		try {
-			// Checks this is an event from a page subscription
-			if (!callback.getObject().equals("page")) {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-			logger.info("Callback from fb: {}", callback);
-			for (Entry entry : callback.getEntry()) {
-				if (entry.getMessaging() != null) {
-					for (Event event : entry.getMessaging()) {
-						if (event.getMessage() != null) {
-							// handleMessage of user
-							service.handleMessage(event);
-						} else if (event.getDelivery() != null) {
-							logger.info("event.getDelivery(): {}", event.getDelivery());
-						} else if (event.getRead() != null) {
-							logger.info("event.getRead(): {}", event.getRead());
-						} else if (event.getPostback() != null) {
-							logger.info("event.getPostback(): {}", event.getPostback());
-						} else {
-							logger.info("Callback/Event type not supported: {}", event);
-							return ResponseEntity.ok("Callback not supported yet!");
-						}
-					}
-				}
-			}
-		} catch (Exception e) {
-			logger.error("Error in fb webhook: Callback: {} \nException: ", callback.toString(), e);
-		}
-		// fb advises to send a 200 response within 20 secs
+	public ResponseEntity<Object> webhookEndpoint(@RequestBody String callback1) {
+		Callback callback = new Callback();
+		logger.info("Callback Object: {}", callback1);
+
+//		try {
+//			// Checks this is an event from a page subscription
+//			if (!callback.getObject().equals("page")) {
+//				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//			}
+//			logger.info("Callback from fb: {}", callback);
+//			for (Entry entry : callback.getEntry()) {
+//				if (entry.getMessaging() != null) {
+//					for (Event event : entry.getMessaging()) {
+//						if (event.getMessage() != null) {
+//							// handleMessage of user
+//							service.handleMessage(event);
+//						} else if (event.getDelivery() != null) {
+//							logger.info("event.getDelivery(): {}", event.getDelivery());
+//						} else if (event.getRead() != null) {
+//							logger.info("event.getRead(): {}", event.getRead());
+//						} else if (event.getPostback() != null) {
+//							logger.info("event.getPostback(): {}", event.getPostback());
+//						} else {
+//							logger.info("Callback/Event type not supported: {}", event);
+//							return ResponseEntity.ok("Callback not supported yet!");
+//						}
+//					}
+//				}
+//			}
+//		} catch (Exception e) {
+//			logger.error("Error in fb webhook: Callback: {} \nException: ", callback.toString(), e);
+//		}
+//		// fb advises to send a 200 response within 20 secs
 		return ResponseEntity.ok("EVENT_RECEIVED");
 	}
 
