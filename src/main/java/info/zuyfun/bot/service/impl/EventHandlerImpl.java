@@ -3,6 +3,7 @@ package info.zuyfun.bot.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
@@ -28,6 +29,7 @@ import info.zuyfun.bot.model.Request;
 import info.zuyfun.bot.model.RequestMessage;
 import info.zuyfun.bot.model.RequestRecipient;
 import info.zuyfun.bot.service.EventHandler;
+import io.vertx.core.json.JsonObject;
 
 @Service
 public class EventHandlerImpl implements EventHandler {
@@ -41,9 +43,12 @@ public class EventHandlerImpl implements EventHandler {
 
 	private WebClient clientPool;
 
+	private ObjectMapper mapper;
+
 	@PostConstruct
 	public void EventHandlerImpl() {
 		fbURLSender += FB_ACCESS_TOKEN;
+		mapper = new ObjectMapper();
 	}
 
 	@Autowired
@@ -112,8 +117,8 @@ public class EventHandlerImpl implements EventHandler {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		try {
-			logger.info("Request Object " + new ObjectMapper().writeValueAsString(objRequest));
-			restTemplate.postForEntity(fbURLSender, "{" + objRequest + "}", info.zuyfun.bot.model.Response.class);
+			JsonObject request = new JsonObject(mapper.writeValueAsString(objRequest));
+			restTemplate.postForEntity(fbURLSender, request, info.zuyfun.bot.model.Response.class);
 
 			logger.info("Response Object {}", clientPool.getResponse());
 		} catch (Exception e) {
