@@ -40,9 +40,10 @@ public class EventHandlerImpl implements MessageHandler {
 	protected RestTemplate restTemplate;
 
 	@Override
-	@Async("webhookEndpoint")
+	@Async("asyncService")
 	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
+			Thread.sleep(1000);
 			if (objMessage == null)
 				return;
 			Request objRequest = new Request();
@@ -103,7 +104,7 @@ public class EventHandlerImpl implements MessageHandler {
 	}
 
 	@Override
-	@Async("webhookEndpoint")
+	@Async("asyncService")
 	public void handlePostback(BigDecimal senderID, String payload) {
 		logger.info("***handlePostback***");
 		// Get the payload for the postback
