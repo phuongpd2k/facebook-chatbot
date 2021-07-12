@@ -60,24 +60,23 @@ public class BotController {
 			if (!callback.getObject().equals("page")) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
-			logger.info("Callback from fb: {}", callback);
+			logger.info("***Callback from fb: {}", callback);
 			for (Entry entry : callback.getEntry()) {
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {
 						if (event.getMessage() != null) {
 							service.handleMessage(event);
 						} else if (event.getPostback() != null) {
-							logger.info("event.getPostback(): {}", event.getPostback());
 							service.handlePostback(event);
 						} else {
-							logger.info("Callback/Event type not supported: {}", event);
+							logger.info("***Callback/Event type not supported: {}", event);
 							return ResponseEntity.ok("Callback not supported yet!");
 						}
 					}
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Error in fb webhook: Callback: {} \nException: ", callback.toString(), e);
+			logger.error("***Error in fb webhook: Callback: {}", e);
 		}
 		return ResponseEntity.ok("EVENT_RECEIVED");
 	}

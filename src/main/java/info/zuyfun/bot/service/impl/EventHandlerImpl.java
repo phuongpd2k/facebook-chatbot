@@ -63,11 +63,12 @@ public class EventHandlerImpl implements EventHandler {
 			objRequest.setRequestRecipient(objRequestRecipient);
 			RequestMessage objRequestMessage = new RequestMessage();
 			objRequest.setRequestMessage(objRequestMessage);
-			logger.info("ObjMessage text: " + objMessage);
+
 			if (objMessage.getText() != null) {
+				logger.info("***Message: object" + objMessage);
 				String messageText = objMessage.getText();
 				// Object Message
-				if (messageText.contains("/ssm")) {
+				if (messageText.contains("/ssm ")) {
 					Simsimi simsimi = callSimsimi(messageText.replace("/ssm ", ""));
 					if (simsimi == null)
 						return;
@@ -76,7 +77,7 @@ public class EventHandlerImpl implements EventHandler {
 					objRequestMessage.setText(messageText);
 				}
 			} else if (objMessage.getAttachments() != null || objMessage.getAttachments().isEmpty()) {
-				logger.info("Payload: object" + objMessage.getAttachments());
+				logger.info("***Payload: object" + objMessage.getAttachments());
 				String attachmentUrl = objMessage.getAttachments().get(0).getPayload().getUrl();
 				Attachment objAttachment = new Attachment();
 				Payload objPayload = new Payload();
@@ -107,14 +108,13 @@ public class EventHandlerImpl implements EventHandler {
 			}
 			callSendAPI(objRequest);
 		} catch (Exception e) {
-			logger.error("handleMessage - Exception: {}", e);
+			logger.error("***handleMessage - Exception: {}", e);
 		}
 	}
 
 	@Override
 	public void handlePostback(Event event) {
-
-		logger.info("handlePostback received_postback: ");
+		logger.info("***handlePostback received_postback: ");
 
 		// Get the payload for the postback
 		String payload = event.getPostback().getPayload();
@@ -150,10 +150,10 @@ public class EventHandlerImpl implements EventHandler {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
-			logger.info("Request Object {}", requestBody.getBody());
+			logger.info("***Request Object {}", requestBody.getBody());
 			restTemplate.postForObject(fbURLSender, requestBody, String.class);
 		} catch (Exception e) {
-			logger.error("*** callSendAPI System Error: " + e);
+			logger.error("***callSendAPI System Error: " + e);
 		}
 
 	}
@@ -167,10 +167,10 @@ public class EventHandlerImpl implements EventHandler {
 			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "&lang=vi_VN").retrieve()
 					.bodyToFlux(Simsimi.class);
 			result = flux.blockFirst() == null ? null : flux.blockFirst();
-			logger.info("Response Data response {}", result);
+			logger.info("***Response Data response {}", result);
 
 		} catch (Exception ex) {
-			logger.error("callSimsimi - Exception: {}", ex);
+			logger.error("***callSimsimi - Exception: {}", ex);
 		}
 		return result;
 	}
