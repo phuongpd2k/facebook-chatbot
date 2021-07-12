@@ -52,7 +52,6 @@ public class EventHandlerImpl implements EventHandler {
 
 	@Override
 	public void handleMessage(Event event) {
-		logger.info("***handlePostback: ");
 		try {
 			Message objMessage = event.getMessage();
 			if (objMessage == null)
@@ -105,6 +104,8 @@ public class EventHandlerImpl implements EventHandler {
 				objButtons.get(1).setType("postback");
 				objButtons.get(1).setTitle("No!");
 				objButtons.get(1).setPayload("no");
+			} else {
+				return;
 			}
 			callSendAPI(objRequest);
 		} catch (Exception e) {
@@ -171,6 +172,7 @@ public class EventHandlerImpl implements EventHandler {
 			logger.error("***callSimsimi Exception: {}", ex);
 		}
 		return result;
+
 	}
 
 }
