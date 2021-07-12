@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import info.zuyfun.bot.constants.FacebookAPI;
 import info.zuyfun.bot.model.Attachment;
@@ -43,7 +45,6 @@ public class EventHandlerImpl implements EventHandler {
 	@PostConstruct
 	public void eventHandleConstruct() {
 		params = new HashMap<String, String>();
-		params.put("access_token=", FB_ACCESS_TOKEN);
 	}
 
 	@Autowired
@@ -148,7 +149,11 @@ public class EventHandlerImpl implements EventHandler {
 			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 			HttpEntity<Object> requestBody = new HttpEntity<>(objRequest, headers);
 			logger.info("***Request Object: {}", requestBody.getBody());
-			restTemplate.postForObject(FacebookAPI.SEND_MESSAGE, requestBody, String.class, params);
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(FacebookAPI.SEND_MESSAGE)
+					.queryParam("access_token", FB_ACCESS_TOKEN);
+			String uriBuilder = builder.build().encode().toUriString();
+			restTemplate.exchange(uriBuilder, HttpMethod.POST, requestBody, String.class);
+
 		} catch (Exception e) {
 			logger.error("***callSendAPI Exception: {}", e);
 		}
