@@ -1,25 +1,22 @@
 package info.zuyfun.bot.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
 
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import info.zuyfun.bot.constants.FacebookAPI;
 import info.zuyfun.bot.model.Attachment;
@@ -34,7 +31,6 @@ import info.zuyfun.bot.model.RequestRecipient;
 
 import info.zuyfun.bot.model.Simsimi;
 import info.zuyfun.bot.service.EventHandler;
-import reactor.core.publisher.Flux;
 
 @Service
 public class EventHandlerImpl implements EventHandler {
@@ -43,10 +39,16 @@ public class EventHandlerImpl implements EventHandler {
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
-	private WebClient webClient;
-	private Map<String, String> params;
 	@Autowired
-	protected RestTemplate restTemplate;
+	private MultivaluedMap<String, String> mapHeader;
+	private WebClient webClient;
+
+	@PostConstruct
+	public void postConstruct() {
+		mapHeader = new MultivaluedHashMap<>();
+		mapHeader.clear();
+		mapHeader.add("Content-Type", "application/json; charset=utf-8");
+	}
 
 	@Override
 	public void handleMessage(Event event) {
@@ -144,14 +146,8 @@ public class EventHandlerImpl implements EventHandler {
 		// Send the HTTP request to the Messenger Platform
 		logger.info("***API Send Message***");
 		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(FacebookAPI.SEND_MESSAGE)
-					.queryParam("access_token", FB_ACCESS_TOKEN);
-			HttpEntity<?> entity = new HttpEntity<>(headers);
-			HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
-					String.class);
-			logger.info("***Response Object: {}", response.getBody());
+			webClient = WebClient.create(FacebookAPI.SEND_MESSAGE).query("access_token", FB_ACCESS_TOKEN);
+			webClient.post(objRequest);
 		} catch (Exception e) {
 			logger.error("***callSendAPI Exception: {}", e);
 		}
@@ -161,17 +157,17 @@ public class EventHandlerImpl implements EventHandler {
 	@Override
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
-		webClient = WebClient.create(SIMSIMI_URL);
+//		webClient = WebClient.create(SIMSIMI_URL);
 		Simsimi result = null;
-		try {
-			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "&lang=vi_VN").retrieve()
-					.bodyToFlux(Simsimi.class);
-			result = flux.blockFirst() == null ? null : flux.blockFirst();
-			logger.info("***Simsimi Response {}", result);
-
-		} catch (Exception ex) {
-			logger.error("***callSimsimi Exception: {}", ex);
-		}
+//		try {
+//			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "&lang=vi_VN").retrieve()
+//					.bodyToFlux(Simsimi.class);
+//			result = flux.blockFirst() == null ? null : flux.blockFirst();
+//			logger.info("***Simsimi Response {}", result);
+//
+//		} catch (Exception ex) {
+//			logger.error("***callSimsimi Exception: {}", ex);
+//		}
 		return result;
 
 	}
