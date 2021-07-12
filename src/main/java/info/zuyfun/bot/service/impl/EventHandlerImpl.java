@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.cxf.jaxrs.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import info.zuyfun.bot.constants.FacebookAPI;
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
 import info.zuyfun.bot.model.Element;
@@ -36,15 +35,15 @@ public class EventHandlerImpl implements EventHandler {
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
-	private MultivaluedMap<String, String> mapHeader;
-	private WebClient webClient;
+	private String fbURLSender = "https://graph.facebook.com/v11.0/me/messages?access_token=";
 
 	@PostConstruct
-	public void postConstruct() {
-		mapHeader = new MultivaluedHashMap<>();
-		mapHeader.clear();
-		mapHeader.add("Content-Type", "application/json; charset=utf-8");
+	public void eventHandleConstruct() {
+		fbURLSender += FB_ACCESS_TOKEN;
 	}
+
+	@Autowired
+	protected RestTemplate restTemplate;
 
 	@Override
 	public void handleMessage(Event event) {
@@ -142,9 +141,11 @@ public class EventHandlerImpl implements EventHandler {
 		// Send the HTTP request to the Messenger Platform
 		logger.info("***API Send Message***");
 		try {
-			webClient = WebClient.create(FacebookAPI.SEND_MESSAGE).query("access_token", FB_ACCESS_TOKEN);
-			webClient.headers(mapHeader);
-			webClient.post(objRequest);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+			HttpEntity<Object> requestBody = new HttpEntity<>(objRequest, headers);
+			logger.info("***Request Object: {}", requestBody.getBody());
+			restTemplate.postForObject(fbURLSender, requestBody, String.class);
 		} catch (Exception e) {
 			logger.error("***callSendAPI Exception: {}", e);
 		}
@@ -154,8 +155,9 @@ public class EventHandlerImpl implements EventHandler {
 	@Override
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
-//		webClient = WebClient.create(SIMSIMI_URL);
+
 		Simsimi result = null;
+//		webClient = WebClient.create(SIMSIMI_URL);
 //		try {
 //			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "&lang=vi_VN").retrieve()
 //					.bodyToFlux(Simsimi.class);
