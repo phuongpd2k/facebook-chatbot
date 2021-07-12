@@ -12,11 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import info.zuyfun.bot.constants.FacebookAPI;
 import info.zuyfun.bot.model.Attachment;
@@ -39,7 +36,6 @@ public class EventHandlerImpl implements EventHandler {
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
-	@Autowired
 	private MultivaluedMap<String, String> mapHeader;
 	private WebClient webClient;
 
