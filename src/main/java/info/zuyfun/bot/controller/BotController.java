@@ -54,13 +54,12 @@ public class BotController {
 	@ResponseBody
 	@PostMapping("/webhook")
 	public ResponseEntity<Object> webhookEndpoint(@RequestBody Callback callback) {
-
+		logger.info("***webhookEndpoint: ");
 		try {
 			// Checks this is an event from a page subscription
 			if (!callback.getObject().equals("page")) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
-			logger.info("***Callback from fb: {}", callback);
 			for (Entry entry : callback.getEntry()) {
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {

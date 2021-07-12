@@ -52,7 +52,7 @@ public class EventHandlerImpl implements EventHandler {
 
 	@Override
 	public void handleMessage(Event event) {
-
+		logger.info("***handlePostback: ");
 		try {
 			Message objMessage = event.getMessage();
 			if (objMessage == null)
@@ -114,8 +114,7 @@ public class EventHandlerImpl implements EventHandler {
 
 	@Override
 	public void handlePostback(Event event) {
-		logger.info("***handlePostback received_postback: ");
-
+		logger.info("***handlePostback: ");
 		// Get the payload for the postback
 		String payload = event.getPostback().getPayload();
 		// Set the response based on the postback payload
@@ -136,7 +135,6 @@ public class EventHandlerImpl implements EventHandler {
 			objRequestMessage.setText("Oops!!!");
 			break;
 		}
-
 		callSendAPI(objRequest);
 
 	}
