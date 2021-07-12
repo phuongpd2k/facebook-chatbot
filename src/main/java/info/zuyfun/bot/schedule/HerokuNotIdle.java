@@ -11,7 +11,7 @@ public class HerokuNotIdle {
 	@Autowired
 	RestTemplate restTemplate;
 
-	@Scheduled(cron = "0 0/15 * * * ? *")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	public void herokuNotIdle() {
 		logger.info("***Heroku not idle execution");
 		restTemplate.getForObject("https://info-zuy-bot.herokuapp.com/", Object.class);
