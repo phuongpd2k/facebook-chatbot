@@ -16,7 +16,7 @@ public class HerokuNotIdle {
 	public void herokuNotIdle() {
 		try {
 			String result = restTemplate.getForObject("https://info-zuy-bot.herokuapp.com/herokuNotIdle", String.class);
-			logger.info("***herokuNotIdle Execution {}", result);
+			logger.info("***herokuNotIdle Execution: {}", result);
 		} catch (Exception e) {
 			logger.error("***herokuNotIdle Exception: {}", e);
 		}

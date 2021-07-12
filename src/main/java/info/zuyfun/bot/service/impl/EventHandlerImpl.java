@@ -64,7 +64,7 @@ public class EventHandlerImpl implements EventHandler {
 			objRequest.setRequestMessage(objRequestMessage);
 
 			if (objMessage.getText() != null) {
-				logger.info("***Message: object" + objMessage);
+				logger.info("***Message object: {}", objMessage);
 				String messageText = objMessage.getText();
 				// Object Message
 				if (messageText.contains("/ssm ")) {
@@ -76,7 +76,7 @@ public class EventHandlerImpl implements EventHandler {
 					objRequestMessage.setText(messageText);
 				}
 			} else if (objMessage.getAttachments() != null || objMessage.getAttachments().isEmpty()) {
-				logger.info("***Payload: object" + objMessage.getAttachments());
+				logger.info("***Payload object: {}", objMessage.getAttachments());
 				String attachmentUrl = objMessage.getAttachments().get(0).getPayload().getUrl();
 				Attachment objAttachment = new Attachment();
 				Payload objPayload = new Payload();
@@ -149,7 +149,7 @@ public class EventHandlerImpl implements EventHandler {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
-			logger.info("***Request Object {}", requestBody.getBody());
+			logger.info("***Request Object: {}", requestBody.getBody());
 			restTemplate.postForObject(fbURLSender, requestBody, String.class);
 		} catch (Exception e) {
 			logger.error("***callSendAPI Exception: {}", e);

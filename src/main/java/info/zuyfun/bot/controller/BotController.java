@@ -75,7 +75,7 @@ public class BotController {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("***Error in fb webhook: Callback: {}", e);
+			logger.error("***Error in Facebook webhook: {}", e);
 		}
 		return ResponseEntity.ok("EVENT_RECEIVED");
 	}
