@@ -20,16 +20,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import info.zuyfun.bot.model.Callback;
 import info.zuyfun.bot.model.Entry;
 import info.zuyfun.bot.model.Event;
-import info.zuyfun.bot.service.EventHandler;
+import info.zuyfun.bot.service.MessageHandler;
 
 @Controller
 public class BotController {
 	private static final Logger logger = LoggerFactory.getLogger(BotController.class);
 	@Value("${verify_token}")
 	private String VERIFY_TOKEN;
-
 	@Autowired
-	private EventHandler service;
+	private MessageHandler service;
 
 	@RequestMapping("/herokuIdle")
 	public ResponseEntity<Object> herokuNotIdle() {
@@ -66,6 +65,8 @@ public class BotController {
 
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {
+						// Start for loop
+
 						BigDecimal senderID = event.getSender().getId();
 						if (event.getMessage() != null) {
 							service.handleMessage(senderID, event.getMessage());
@@ -76,6 +77,8 @@ public class BotController {
 							return ResponseEntity.ok("Callback not supported yet!");
 						}
 					}
+
+					// Stop for loop
 				}
 			}
 		} catch (Exception e) {

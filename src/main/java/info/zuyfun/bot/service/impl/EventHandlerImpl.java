@@ -2,11 +2,7 @@ package info.zuyfun.bot.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -24,7 +21,6 @@ import info.zuyfun.bot.constants.FacebookAPI;
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
 import info.zuyfun.bot.model.Element;
-import info.zuyfun.bot.model.Event;
 import info.zuyfun.bot.model.Message;
 import info.zuyfun.bot.model.Payload;
 import info.zuyfun.bot.model.Request;
@@ -32,26 +28,19 @@ import info.zuyfun.bot.model.RequestMessage;
 import info.zuyfun.bot.model.RequestRecipient;
 
 import info.zuyfun.bot.model.Simsimi;
-import info.zuyfun.bot.service.EventHandler;
+import info.zuyfun.bot.service.MessageHandler;
 
 @Service
-public class EventHandlerImpl implements EventHandler {
+public class EventHandlerImpl implements MessageHandler {
 	private static final Logger logger = LoggerFactory.getLogger(EventHandlerImpl.class);
 	@Value("${fb_access_token}")
 	private String FB_ACCESS_TOKEN;
-	@Value("${simsimi_url}")
-	private String SIMSIMI_URL;
-	Map<String, String> params;
-
-	@PostConstruct
-	public void eventHandleConstruct() {
-		params = new HashMap<String, String>();
-	}
 
 	@Autowired
 	protected RestTemplate restTemplate;
 
 	@Override
+	@Async("webhookEndpoint")
 	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
 			if (objMessage == null)
@@ -114,6 +103,7 @@ public class EventHandlerImpl implements EventHandler {
 	}
 
 	@Override
+	@Async("webhookEndpoint")
 	public void handlePostback(BigDecimal senderID, String payload) {
 		logger.info("***handlePostback***");
 		// Get the payload for the postback
