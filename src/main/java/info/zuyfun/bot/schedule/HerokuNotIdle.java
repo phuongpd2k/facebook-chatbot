@@ -12,11 +12,11 @@ public class HerokuNotIdle {
 	@Autowired
 	RestTemplate restTemplate;
 
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	public void herokuNotIdle() {
 		logger.info("***Heroku not idle execution");
 		try {
-			restTemplate.getForObject("https://info-zuy-bot.herokuapp.com/herokuNotIdle", Object.class);
+			restTemplate.getForObject("https://info-zuy-bot.herokuapp.com/herokuNotIdle", String.class);
 		} catch (Exception e) {
 			logger.error("***herokuNotIdle Exception: {}", e);
 		}
