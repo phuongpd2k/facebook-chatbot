@@ -141,14 +141,14 @@ public class EventHandlerImpl implements EventHandler {
 	}
 
 	@Override
-	public void callSendAPI(Request objRequest) {
+	public void callSendAPI(Object objRequest) {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
 		logger.info("***API Send Message***");
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-			HttpEntity<Request> requestBody = new HttpEntity<>(objRequest, headers);
+			HttpEntity<Object> requestBody = new HttpEntity<>(objRequest, headers);
 			logger.info("***Request Object: {}", requestBody.getBody());
 			restTemplate.postForObject(fbURLSender, requestBody, String.class);
 		} catch (Exception e) {

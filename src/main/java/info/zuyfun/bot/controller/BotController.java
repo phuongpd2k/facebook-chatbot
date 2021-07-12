@@ -60,7 +60,6 @@ public class BotController {
 			if (!callback.getObject().equals("page")) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
-			
 			for (Entry entry : callback.getEntry()) {
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {
