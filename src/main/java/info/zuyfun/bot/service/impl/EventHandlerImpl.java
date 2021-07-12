@@ -143,6 +143,7 @@ public class EventHandlerImpl implements EventHandler {
 		logger.info("***API Send Message***");
 		try {
 			webClient = WebClient.create(FacebookAPI.SEND_MESSAGE).query("access_token", FB_ACCESS_TOKEN);
+			webClient.headers(mapHeader);
 			webClient.post(objRequest);
 		} catch (Exception e) {
 			logger.error("***callSendAPI Exception: {}", e);
