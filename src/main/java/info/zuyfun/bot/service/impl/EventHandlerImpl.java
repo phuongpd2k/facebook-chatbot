@@ -1,7 +1,9 @@
 package info.zuyfun.bot.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -11,12 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import info.zuyfun.bot.constants.FacebookAPI;
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
 import info.zuyfun.bot.model.Element;
@@ -38,15 +43,8 @@ public class EventHandlerImpl implements EventHandler {
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
-	private String fbURLSender = "https://graph.facebook.com/v11.0/me/messages?access_token=";
-
 	private WebClient webClient;
-
-	@PostConstruct
-	public void eventHandleConstruct() {
-		fbURLSender += FB_ACCESS_TOKEN;
-	}
-
+	private Map<String, String> params;
 	@Autowired
 	protected RestTemplate restTemplate;
 
@@ -147,10 +145,13 @@ public class EventHandlerImpl implements EventHandler {
 		logger.info("***API Send Message***");
 		try {
 			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-			HttpEntity<Object> requestBody = new HttpEntity<>(objRequest, headers);
-			logger.info("***Request Object: {}", requestBody.getBody());
-			restTemplate.postForObject(fbURLSender, requestBody, String.class);
+			headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(FacebookAPI.SEND_MESSAGE)
+					.queryParam("access_token", FB_ACCESS_TOKEN);
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+			HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
+					String.class);
+			logger.info("***Response Object: {}", response.getBody());
 		} catch (Exception e) {
 			logger.error("***callSendAPI Exception: {}", e);
 		}
