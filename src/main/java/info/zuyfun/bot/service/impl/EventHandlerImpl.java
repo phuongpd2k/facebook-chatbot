@@ -153,7 +153,7 @@ public class EventHandlerImpl implements EventHandler {
 			logger.info("***Request Object {}", requestBody.getBody());
 			restTemplate.postForObject(fbURLSender, requestBody, String.class);
 		} catch (Exception e) {
-			logger.error("***callSendAPI System Error: " + e);
+			logger.error("***callSendAPI Exception: {}", e);
 		}
 
 	}
@@ -167,10 +167,10 @@ public class EventHandlerImpl implements EventHandler {
 			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "&lang=vi_VN").retrieve()
 					.bodyToFlux(Simsimi.class);
 			result = flux.blockFirst() == null ? null : flux.blockFirst();
-			logger.info("***Response Data response {}", result);
+			logger.info("***Simsimi Response {}", result);
 
 		} catch (Exception ex) {
-			logger.error("***callSimsimi - Exception: {}", ex);
+			logger.error("***callSimsimi Exception: {}", ex);
 		}
 		return result;
 	}
