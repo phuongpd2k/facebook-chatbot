@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableScheduling
 @Configuration
 public class BotConfig {
+	
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
