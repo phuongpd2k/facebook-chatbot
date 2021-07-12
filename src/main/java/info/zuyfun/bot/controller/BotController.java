@@ -1,5 +1,7 @@
 package info.zuyfun.bot.controller;
 
+import java.math.BigDecimal;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -54,19 +56,21 @@ public class BotController {
 	@ResponseBody
 	@PostMapping("/webhook")
 	public ResponseEntity<Object> webhookEndpoint(@RequestBody Callback callback) {
-		logger.info("***webhookEndpoint*** : {}",callback);
+		logger.info("***webhookEndpoint***");
 		try {
 			// Checks this is an event from a page subscription
 			if (!callback.getObject().equals("page")) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			for (Entry entry : callback.getEntry()) {
+
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {
+						BigDecimal senderID = event.getSender().getId();
 						if (event.getMessage() != null) {
-							service.handleMessage(event);
+							service.handleMessage(senderID, event.getMessage());
 						} else if (event.getPostback() != null) {
-							service.handlePostback(event);
+							service.handlePostback(senderID, event.getPostback().getPayload());
 						} else {
 							logger.info("***Callback/Event type not supported: {}", event);
 							return ResponseEntity.ok("Callback not supported yet!");

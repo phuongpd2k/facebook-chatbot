@@ -1,5 +1,6 @@
 package info.zuyfun.bot.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,22 +52,21 @@ public class EventHandlerImpl implements EventHandler {
 	protected RestTemplate restTemplate;
 
 	@Override
-	public void handleMessage(Event event) {
+	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
-			Message objMessage = event.getMessage();
 			if (objMessage == null)
 				return;
 			Request objRequest = new Request();
 			RequestRecipient objRequestRecipient = new RequestRecipient();
-			objRequestRecipient.setId(event.getSender().getId());
+			objRequestRecipient.setId(senderID);
 			objRequest.setRequestRecipient(objRequestRecipient);
 			RequestMessage objRequestMessage = new RequestMessage();
 			objRequest.setRequestMessage(objRequestMessage);
 
 			if (objMessage.getText() != null) {
-				logger.info("***Message object: {}", objMessage);
+				logger.info("***Attachment object: {}", objMessage);
 				String messageText = objMessage.getText();
-				// Object Message
+				// Object Attachment
 				if (messageText.contains("/ssm ")) {
 					Simsimi simsimi = callSimsimi(messageText.replace("/ssm ", ""));
 					if (simsimi == null)
@@ -114,14 +114,14 @@ public class EventHandlerImpl implements EventHandler {
 	}
 
 	@Override
-	public void handlePostback(Event event) {
+	public void handlePostback(BigDecimal senderID, String payload) {
 		logger.info("***handlePostback***");
 		// Get the payload for the postback
-		String payload = event.getPostback().getPayload();
+
 		// Set the response based on the postback payload
 		Request objRequest = new Request();
 		RequestRecipient objRequestRecipient = new RequestRecipient();
-		objRequestRecipient.setId(event.getSender().getId());
+		objRequestRecipient.setId(senderID);
 		objRequest.setRequestRecipient(objRequestRecipient);
 		RequestMessage objRequestMessage = new RequestMessage();
 		objRequest.setRequestMessage(objRequestMessage);
@@ -131,6 +131,9 @@ public class EventHandlerImpl implements EventHandler {
 			break;
 		case "no":
 			objRequestMessage.setText("Oops, Hãy thử lại tấm ảnh khác!");
+			break;
+		case "GET_STARTED":
+			objRequestMessage.setText("Ồ lần đầu à :o");
 			break;
 		default:
 			objRequestMessage.setText("Oops!!!");
@@ -143,17 +146,16 @@ public class EventHandlerImpl implements EventHandler {
 	public void callSendAPI(Object objRequest) {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
-		logger.info("***API Send Message***");
+		logger.info("***API Send Attachment***");
 		try {
 			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+			headers.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity<Object> requestBody = new HttpEntity<>(objRequest, headers);
 			logger.info("***Request Object: {}", requestBody.getBody());
 			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(FacebookAPI.SEND_MESSAGE)
 					.queryParam("access_token", FB_ACCESS_TOKEN);
 			String uriBuilder = builder.build().encode().toUriString();
 			restTemplate.exchange(uriBuilder, HttpMethod.POST, requestBody, String.class);
-
 		} catch (Exception e) {
 			logger.error("***callSendAPI Exception: {}", e);
 		}

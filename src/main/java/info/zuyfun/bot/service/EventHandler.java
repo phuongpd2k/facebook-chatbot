@@ -1,12 +1,14 @@
 package info.zuyfun.bot.service;
 
-import info.zuyfun.bot.model.Event;
+import java.math.BigDecimal;
+
+import info.zuyfun.bot.model.Message;
 
 public interface EventHandler {
 	// Handles messages events
-	void handleMessage(Event event);
+	void handleMessage(BigDecimal senderID, Message message);
 
 	// Handles messaging_postbacks events
-	void handlePostback(Event event);
+	void handlePostback(BigDecimal senderID, String payload);
 
 }
