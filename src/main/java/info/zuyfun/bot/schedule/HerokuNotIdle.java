@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-@Component
 public class HerokuNotIdle {
 	private static final Logger logger = LoggerFactory.getLogger(HerokuNotIdle.class);
 
