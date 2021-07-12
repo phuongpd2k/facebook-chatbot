@@ -54,7 +54,7 @@ public class BotController {
 	@ResponseBody
 	@PostMapping("/webhook")
 	public ResponseEntity<Object> webhookEndpoint(@RequestBody Callback callback) {
-		logger.info("***webhookEndpoint: ");
+		logger.info("***webhookEndpoint***");
 		try {
 			// Checks this is an event from a page subscription
 			if (!callback.getObject().equals("page")) {

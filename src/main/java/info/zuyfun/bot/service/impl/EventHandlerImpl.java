@@ -115,7 +115,7 @@ public class EventHandlerImpl implements EventHandler {
 
 	@Override
 	public void handlePostback(Event event) {
-		logger.info("***handlePostback: ");
+		logger.info("***handlePostback***");
 		// Get the payload for the postback
 		String payload = event.getPostback().getPayload();
 		// Set the response based on the postback payload
@@ -144,7 +144,7 @@ public class EventHandlerImpl implements EventHandler {
 	public void callSendAPI(Request objRequest) {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
-		logger.info("***Call API Facebook to sendMessage");
+		logger.info("***API Send Message***");
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
@@ -159,7 +159,7 @@ public class EventHandlerImpl implements EventHandler {
 
 	@Override
 	public Simsimi callSimsimi(String messageText) {
-		logger.info("***Call Simsimi");
+		logger.info("***Call Simsimi***");
 		webClient = WebClient.create(SIMSIMI_URL);
 		Simsimi result = null;
 		try {
