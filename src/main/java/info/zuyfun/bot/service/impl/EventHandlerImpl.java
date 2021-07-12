@@ -1,7 +1,9 @@
 package info.zuyfun.bot.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -15,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import info.zuyfun.bot.constants.FacebookAPI;
 import info.zuyfun.bot.model.Attachment;
 import info.zuyfun.bot.model.Button;
 import info.zuyfun.bot.model.Element;
@@ -35,11 +38,12 @@ public class EventHandlerImpl implements EventHandler {
 	private String FB_ACCESS_TOKEN;
 	@Value("${simsimi_url}")
 	private String SIMSIMI_URL;
-	private String fbURLSender = "https://graph.facebook.com/v11.0/me/messages?access_token=";
+	Map<String, String> params;
 
 	@PostConstruct
 	public void eventHandleConstruct() {
-		fbURLSender += FB_ACCESS_TOKEN;
+		params = new HashMap<String, String>();
+		params.put("access_token=", FB_ACCESS_TOKEN);
 	}
 
 	@Autowired
@@ -135,7 +139,6 @@ public class EventHandlerImpl implements EventHandler {
 
 	}
 
-	@Override
 	public void callSendAPI(Object objRequest) {
 		// Construct the message body
 		// Send the HTTP request to the Messenger Platform
@@ -145,14 +148,13 @@ public class EventHandlerImpl implements EventHandler {
 			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 			HttpEntity<Object> requestBody = new HttpEntity<>(objRequest, headers);
 			logger.info("***Request Object: {}", requestBody.getBody());
-			restTemplate.postForObject(fbURLSender, requestBody, String.class);
+			restTemplate.postForObject(FacebookAPI.SEND_MESSAGE, requestBody, String.class, params);
 		} catch (Exception e) {
 			logger.error("***callSendAPI Exception: {}", e);
 		}
 
 	}
 
-	@Override
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
 
