@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import info.zuyfun.bot.model.Callback;
@@ -27,6 +28,11 @@ public class BotController {
 
 	@Autowired
 	private EventHandler service;
+
+	@RequestMapping("/herokuNotIdle")
+	public ResponseEntity<Object> herokuNotIdle() {
+		return ResponseEntity.ok("SUCCESS");
+	}
 
 	@GetMapping("/webhook")
 	public ResponseEntity<Object> verifyWebhook(HttpServletRequest req) {

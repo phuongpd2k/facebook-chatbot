@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+@Component
 public class HerokuNotIdle {
 	private static final Logger logger = LoggerFactory.getLogger(HerokuNotIdle.class);
+
 	@Autowired
 	RestTemplate restTemplate;
 
@@ -15,7 +18,7 @@ public class HerokuNotIdle {
 	public void herokuNotIdle() {
 		logger.info("***Heroku not idle execution");
 		try {
-			restTemplate.getForObject("https://info-zuy-bot.herokuapp.com/", Object.class);
+			restTemplate.getForObject("https://info-zuy-bot.herokuapp.com/herokuNotIdle", Object.class);
 		} catch (Exception e) {
 			logger.error("***herokuNotIdle Exception: {}", e);
 		}
