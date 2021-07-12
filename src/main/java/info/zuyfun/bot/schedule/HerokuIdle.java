@@ -6,19 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.client.RestTemplate;
 
-public class HerokuNotIdle {
-	private static final Logger logger = LoggerFactory.getLogger(HerokuNotIdle.class);
+public class HerokuIdle {
+	private static final Logger logger = LoggerFactory.getLogger(HerokuIdle.class);
 
 	@Autowired
 	RestTemplate restTemplate;
 
 	@Scheduled(cron = "0 0/10 * * * ?")
-	public void herokuNotIdle() {
+	public void herokuIdle() {
 		try {
-			String result = restTemplate.getForObject("https://info-zuy-bot.herokuapp.com/herokuNotIdle", String.class);
-			logger.info("***herokuNotIdle Execution: {}", result);
+			String result = restTemplate.getForObject("https://info-zuy-bot.herokuapp.com/herokuIdle", String.class);
+			logger.info("***herokuIdle Execution: {}", result);
 		} catch (Exception e) {
-			logger.error("***herokuNotIdle Exception: {}", e);
+			logger.error("***herokuIdle Exception: {}", e);
 		}
 	}
 }

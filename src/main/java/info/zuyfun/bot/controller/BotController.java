@@ -29,7 +29,7 @@ public class BotController {
 	@Autowired
 	private EventHandler service;
 
-	@RequestMapping("/herokuNotIdle")
+	@RequestMapping("/herokuIdle")
 	public ResponseEntity<Object> herokuNotIdle() {
 		return ResponseEntity.ok("SUCCESS");
 	}
