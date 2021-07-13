@@ -1,8 +1,8 @@
-package info.zuyfun.bot.service;
+package info.zuyfun.bot.facebook.service;
 
 import java.math.BigDecimal;
 
-import info.zuyfun.bot.model.Message;
+import info.zuyfun.bot.facebook.model.Message;
 
 public interface MessageHandler {
 	// Handles messages events

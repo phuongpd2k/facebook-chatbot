@@ -10,19 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import info.zuyfun.bot.model.Callback;
-import info.zuyfun.bot.model.Entry;
-import info.zuyfun.bot.model.Event;
-import info.zuyfun.bot.service.MessageHandler;
+import info.zuyfun.bot.facebook.model.Callback;
+import info.zuyfun.bot.facebook.model.Entry;
+import info.zuyfun.bot.facebook.model.Event;
+import info.zuyfun.bot.facebook.service.MessageHandler;
 
-@Controller
+@RestController
 public class BotController {
 	private static final Logger logger = LoggerFactory.getLogger(BotController.class);
 	@Value("${verify_token}")
@@ -52,7 +51,6 @@ public class BotController {
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	}
 
-	@ResponseBody
 	@PostMapping("/webhook")
 	public ResponseEntity<Object> webhookEndpoint(@RequestBody Callback callback) {
 		logger.info("***webhookEndpoint***");

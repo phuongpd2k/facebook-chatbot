@@ -1,4 +1,4 @@
-package info.zuyfun.bot.model;
+package info.zuyfun.bot.facebook.model;
 
 import java.io.Serializable;
 
@@ -15,17 +15,16 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class Postback implements Serializable {
+public class Response implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@JsonProperty("title")
-	private String title;
-	@JsonProperty("payload")
-	private String payload;
-	@JsonProperty("mid")
-	private String mid;
-
+	@JsonProperty("recipient_id")
+	private String recipient_id;
+	@JsonProperty("message_id")
+	private String message_id;
+	@JsonProperty("error")
+	private Error error;
 }

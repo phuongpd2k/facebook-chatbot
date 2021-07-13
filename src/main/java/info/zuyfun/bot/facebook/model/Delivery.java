@@ -1,6 +1,7 @@
-package info.zuyfun.bot.model;
+package info.zuyfun.bot.facebook.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,13 +15,14 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class Read implements Serializable{
-    
-    /**
+public class Delivery implements Serializable {
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private List<String> mids;
 	private Long watermark;
-    private Integer seq;
+	private Integer seq;
 
 }

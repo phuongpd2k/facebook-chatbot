@@ -15,15 +15,15 @@ public class AsyncServiceConfig {
 	public Executor asyncServiceExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		// core thread pool size
-		executor.setCorePoolSize(10);
+		executor.setCorePoolSize(5);
 		// Maximum number of threads
-		executor.setMaxPoolSize(20);
+		executor.setMaxPoolSize(10);
 		// Queue capacity
-		executor.setQueueCapacity(300);
+		executor.setQueueCapacity(50);
 		// Active time
 		executor.setKeepAliveSeconds(60);
 		// Thread name prefix
-		executor.setThreadNamePrefix("asyncService-");
+		executor.setThreadNamePrefix("async-Service-");
 		// rejection-policy: How to handle new tasks when pool has reached max size
 		// CALLER_RUNS: Do not execute tasks in new threads, but in threads where the
 		// caller resides.

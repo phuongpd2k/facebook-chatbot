@@ -1,4 +1,4 @@
-package info.zuyfun.bot.model;
+package info.zuyfun.bot.facebook.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

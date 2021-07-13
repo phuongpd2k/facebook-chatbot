@@ -1,4 +1,4 @@
-package info.zuyfun.bot.service.impl;
+package info.zuyfun.bot.facebook.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,18 +17,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import info.zuyfun.bot.constants.FacebookAPI;
-import info.zuyfun.bot.model.Attachment;
-import info.zuyfun.bot.model.Button;
-import info.zuyfun.bot.model.Element;
-import info.zuyfun.bot.model.Message;
-import info.zuyfun.bot.model.Payload;
-import info.zuyfun.bot.model.Request;
-import info.zuyfun.bot.model.RequestMessage;
-import info.zuyfun.bot.model.RequestRecipient;
-
-import info.zuyfun.bot.model.Simsimi;
-import info.zuyfun.bot.service.MessageHandler;
+import info.zuyfun.bot.constants.FacebookAPIUrl;
+import info.zuyfun.bot.facebook.model.Attachment;
+import info.zuyfun.bot.facebook.model.Button;
+import info.zuyfun.bot.facebook.model.Element;
+import info.zuyfun.bot.facebook.model.Message;
+import info.zuyfun.bot.facebook.model.Payload;
+import info.zuyfun.bot.facebook.model.Request;
+import info.zuyfun.bot.facebook.model.RequestMessage;
+import info.zuyfun.bot.facebook.model.RequestRecipient;
+import info.zuyfun.bot.facebook.model.Simsimi;
+import info.zuyfun.bot.facebook.service.MessageHandler;
 
 @Service
 public class EventHandlerImpl implements MessageHandler {
@@ -40,7 +39,7 @@ public class EventHandlerImpl implements MessageHandler {
 	protected RestTemplate restTemplate;
 
 	@Override
-//	@Async("asyncService")
+	@Async("asyncService")
 	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
 			testThreadPool();
@@ -154,7 +153,7 @@ public class EventHandlerImpl implements MessageHandler {
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity<Object> requestBody = new HttpEntity<>(objRequest, headers);
 			logger.info("***Request Object: {}", requestBody.getBody());
-			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(FacebookAPI.SEND_MESSAGE)
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(FacebookAPIUrl.SEND_MESSAGE)
 					.queryParam("access_token", FB_ACCESS_TOKEN);
 			String uriBuilder = builder.build().encode().toUriString();
 			restTemplate.exchange(uriBuilder, HttpMethod.POST, requestBody, String.class);

@@ -1,4 +1,4 @@
-package info.zuyfun.bot.model;
+package info.zuyfun.bot.facebook.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

@@ -1,9 +1,9 @@
-package info.zuyfun.bot.template;
+package info.zuyfun.bot.facebook.template;
 
 import java.math.BigDecimal;
 
-import info.zuyfun.bot.model.Action;
-import info.zuyfun.bot.model.RequestRecipient;
+import info.zuyfun.bot.facebook.model.Action;
+import info.zuyfun.bot.facebook.model.RequestRecipient;
 
 public class Typing {
 	public Action typingOn(BigDecimal id) {

@@ -1,6 +1,7 @@
-package info.zuyfun.bot.model;
+package info.zuyfun.bot.facebook.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,26 +16,23 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class Button implements Serializable {
+public class Element implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String type;
-	private String url;
 	private String title;
-	private String payload;
-	@JsonProperty("webview_height_ratio")
-	private String webviewHeightRatio;
-	@JsonProperty("messenger_extensions")
-	private Boolean messengerExtensions;
-	@JsonProperty("fallback_url")
-	private String fallbackUrl;
-	@JsonProperty("content_type")
-	private String contentType;
+	private String subtitle;
+	private Integer quantity;
+	private Double price;
+	private String currency;
 	@JsonProperty("image_url")
 	private String imageUrl;
-
+	@JsonProperty("item_url")
+	private String itemUrl;
+	@JsonProperty("default_action")
+	private Button defaultAction;
+	private List<Button> buttons;
 
 }
