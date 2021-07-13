@@ -40,7 +40,7 @@ public class EventHandlerImpl implements MessageHandler {
 	protected RestTemplate restTemplate;
 
 	@Override
-	@Async("asyncService")
+//	@Async("asyncService")
 	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
 			testThreadPool();

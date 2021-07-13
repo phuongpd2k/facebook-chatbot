@@ -10,7 +10,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @EnableAsync
 @Configuration
-public class TaskPoolConfig {
+public class AsyncServiceConfig {
 	@Bean("asyncService")
 	public Executor asyncServiceExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -19,7 +19,7 @@ public class TaskPoolConfig {
 		// Maximum number of threads
 		executor.setMaxPoolSize(20);
 		// Queue capacity
-		executor.setQueueCapacity(100);
+		executor.setQueueCapacity(300);
 		// Active time
 		executor.setKeepAliveSeconds(60);
 		// Thread name prefix
