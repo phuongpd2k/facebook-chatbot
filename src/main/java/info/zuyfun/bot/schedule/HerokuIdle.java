@@ -15,7 +15,7 @@ public class HerokuIdle {
 	@Scheduled(cron = "0 0/10 * * * ?")
 	public void herokuIdle() {
 		try {
-			String result = restTemplate.getForObject("https://info-zuy-bot.herokuapp.com/herokuIdle", String.class);
+			String result = restTemplate.getForObject("https://info-zuyfun-bot.herokuapp.com/herokuIdle", String.class);
 			logger.info("***herokuIdle Execution: {}", result);
 		} catch (Exception e) {
 			logger.error("***herokuIdle Exception: {}", e);
