@@ -19,10 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import info.zuyfun.bot.constants.FacebookAPIUrl;
 import info.zuyfun.bot.facebook.model.Attachment;
-import info.zuyfun.bot.facebook.model.Button;
-import info.zuyfun.bot.facebook.model.Element;
 import info.zuyfun.bot.facebook.model.Message;
-import info.zuyfun.bot.facebook.model.Payload;
 import info.zuyfun.bot.facebook.model.Request;
 import info.zuyfun.bot.facebook.model.RequestMessage;
 import info.zuyfun.bot.facebook.model.RequestRecipient;
