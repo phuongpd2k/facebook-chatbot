@@ -3,6 +3,8 @@ package info.zuyfun.bot.facebook.template;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,16 +23,16 @@ public class MessageTemplate {
 	}
 
 	public Attachment testPayload(String imageUrl) {
+		template = new Template();
 		Attachment objAttachment = template.attachmentPostback();
 		logger.info("***objAttachment: {}", objAttachment);
 		List<Element> listElement = new ArrayList<Element>();
 		objAttachment.getPayload().setElements(listElement);
-		objAttachment.getPayload().getElements()
-				.add(template.elementPostBack("Is this the right picture?", "Tap a button to answer.", imageUrl));
+		listElement.add(template.elementPostBack("Is this the right picture?", "Tap a button to answer.", imageUrl));
 		List<Button> listButton = new ArrayList<Button>();
 		objAttachment.getPayload().getElements().get(0).setButtons(listButton);
-		objAttachment.getPayload().getElements().get(0).getButtons().add(template.buttonPostBack("Yes!", "yes"));
-		objAttachment.getPayload().getElements().get(0).getButtons().add(template.buttonPostBack("No!", "no"));
+		listButton.add(template.buttonPostBack("Yes!", "yes"));
+		listButton.add(template.buttonPostBack("No!", "no"));
 		return objAttachment;
 	}
 }
