@@ -15,9 +15,9 @@ public class TaskPoolConfig {
 	public Executor asyncServiceExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		// core thread pool size
-		executor.setCorePoolSize(5);
+		executor.setCorePoolSize(10);
 		// Maximum number of threads
-		executor.setMaxPoolSize(15);
+		executor.setMaxPoolSize(20);
 		// Queue capacity
 		executor.setQueueCapacity(100);
 		// Active time
