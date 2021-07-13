@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,7 @@ import info.zuyfun.bot.facebook.model.Entry;
 import info.zuyfun.bot.facebook.model.Event;
 import info.zuyfun.bot.facebook.service.MessageHandler;
 
-@Controller
+@RestController
 public class BotController {
 	private static final Logger logger = LoggerFactory.getLogger(BotController.class);
 	@Value("${verify_token}")

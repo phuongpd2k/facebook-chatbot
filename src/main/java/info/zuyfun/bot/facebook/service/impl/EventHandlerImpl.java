@@ -28,6 +28,7 @@ import info.zuyfun.bot.facebook.model.RequestMessage;
 import info.zuyfun.bot.facebook.model.RequestRecipient;
 import info.zuyfun.bot.facebook.model.Simsimi;
 import info.zuyfun.bot.facebook.service.MessageHandler;
+import info.zuyfun.bot.facebook.template.MessageTemplate;
 
 @Service
 public class EventHandlerImpl implements MessageHandler {
@@ -37,6 +38,8 @@ public class EventHandlerImpl implements MessageHandler {
 
 	@Autowired
 	protected RestTemplate restTemplate;
+	@Autowired
+	MessageTemplate messageTemplate;
 
 	@Override
 	@Async("asyncService")
@@ -67,32 +70,8 @@ public class EventHandlerImpl implements MessageHandler {
 			} else if (objMessage.getAttachments() != null || objMessage.getAttachments().isEmpty()) {
 				logger.info("***Payload object: {}", objMessage.getAttachments());
 				String attachmentUrl = objMessage.getAttachments().get(0).getPayload().getUrl();
-				Attachment objAttachment = new Attachment();
-				Payload objPayload = new Payload();
-				List<Element> objElements = new ArrayList<Element>();
-				List<Button> objButtons = new ArrayList<Button>();
-				// Object message
+				Attachment objAttachment = messageTemplate.testPayload(attachmentUrl);
 				objRequestMessage.setAttachment(objAttachment);
-				// Type
-				objAttachment.setType("template");
-				objAttachment.setPayload(objPayload);
-				// Payload
-				objPayload.setTemplateType("generic");
-				objPayload.setElements(objElements);
-				// Element
-				objElements.add(new Element());
-				objElements.get(0).setTitle("Is this the right picture?");
-				objElements.get(0).setSubtitle("Tap a button to answer.");
-				objElements.get(0).setImageUrl(attachmentUrl);
-				objElements.get(0).setButtons(objButtons);
-				objButtons.add(new Button());
-				objButtons.add(new Button());
-				objButtons.get(0).setType("postback");
-				objButtons.get(0).setTitle("Yes!");
-				objButtons.get(0).setPayload("yes");
-				objButtons.get(1).setType("postback");
-				objButtons.get(1).setTitle("No!");
-				objButtons.get(1).setPayload("no");
 			} else {
 				return;
 			}
