@@ -43,6 +43,7 @@ public class EventHandlerImpl implements MessageHandler {
 	@Async("asyncService")
 	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
+			testThreadPool();
 			if (objMessage == null)
 				return;
 			Request objRequest = new Request();
@@ -99,6 +100,17 @@ public class EventHandlerImpl implements MessageHandler {
 			callSendAPI(objRequest);
 		} catch (Exception e) {
 			logger.error("***handleMessage - Exception: {}", e);
+		}
+	}
+
+	public void testThreadPool() {
+		for (int i = 0; i < 5; i++) {
+			try {
+				Thread.sleep(1000);
+				logger.info("i=" + i);
+			} catch (Exception e) {
+				logger.info("***loopException : {}", e);
+			}
 		}
 	}
 
