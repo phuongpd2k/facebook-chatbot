@@ -23,7 +23,6 @@ public class MessageTemplate {
 	}
 
 	public Attachment testPayload(String imageUrl) {
-		template = new Template();
 		Attachment objAttachment = template.attachmentPostback();
 		logger.info("***objAttachment: {}", objAttachment);
 		List<Element> listElement = new ArrayList<Element>();
@@ -43,7 +42,7 @@ class Template {
 		objButton.setType("postback");
 		objButton.setTitle(title);
 		objButton.setPayload(payload);
-		return null;
+		return objButton;
 	}
 
 	public Element elementPostBack(String title, String subTitle, String imageUrl) {
@@ -51,7 +50,7 @@ class Template {
 		objElement.setTitle(title);
 		objElement.setSubtitle(subTitle);
 		objElement.setImageUrl(imageUrl);
-		return null;
+		return objElement;
 	}
 
 	public Payload payloadPostBack() {
@@ -63,6 +62,6 @@ class Template {
 	public Attachment attachmentPostback() {
 		Attachment objAttachment = new Attachment();
 		objAttachment.setType("template");
-		return null;
+		return objAttachment;
 	}
 }
