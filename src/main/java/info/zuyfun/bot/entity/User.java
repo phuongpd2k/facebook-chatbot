@@ -25,6 +25,6 @@ public class User implements Serializable {
 	private boolean isChatWithBot;
 	@Column(name = "IS_NOTIFICATION_KQXS")
 	private boolean isNotificationKQXS;
-	@Column(name = "LAST_TIME_CHAT")
+	@Column(name = "LAST_TIME_CHAT", length = 13)
 	private String lastTimeChat;
 }
