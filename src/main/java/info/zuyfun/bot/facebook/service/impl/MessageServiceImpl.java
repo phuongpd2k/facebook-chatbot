@@ -29,7 +29,9 @@ import info.zuyfun.bot.service.UserService;
 
 @Service
 public class MessageServiceImpl implements MessageService {
+	
 	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
+	
 	@Value("${fb_access_token}")
 	private String FB_ACCESS_TOKEN;
 
