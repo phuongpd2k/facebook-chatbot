@@ -44,8 +44,24 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	UserService userService;
 
+	public void callSendAPI(Object objRequest) {
+		logger.info("***API Send Attachment***");
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<Object> requestBody = new HttpEntity<>(objRequest, headers);
+			logger.info("***Request Object: {}", requestBody.getBody());
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(FacebookAPIUrl.SEND_MESSAGE)
+					.queryParam("access_token", FB_ACCESS_TOKEN);
+			String uriBuilder = builder.build().encode().toUriString();
+			restTemplate.exchange(uriBuilder, HttpMethod.POST, requestBody, String.class);
+		} catch (Exception e) {
+			logger.error("***callSendAPI Exception: {}", e);
+		}
+
+	}
+
 	@Override
-//	@Async("asyncService")
 	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
 			if (objMessage == null)
@@ -98,7 +114,6 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-//	@Async("asyncService")
 	public void handlePostback(BigDecimal senderID, String payload) {
 		logger.info("***handlePostback***");
 
@@ -123,23 +138,6 @@ public class MessageServiceImpl implements MessageService {
 			break;
 		}
 		callSendAPI(objRequest);
-
-	}
-
-	public void callSendAPI(Object objRequest) {
-		logger.info("***API Send Attachment***");
-		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			HttpEntity<Object> requestBody = new HttpEntity<>(objRequest, headers);
-			logger.info("***Request Object: {}", requestBody.getBody());
-			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(FacebookAPIUrl.SEND_MESSAGE)
-					.queryParam("access_token", FB_ACCESS_TOKEN);
-			String uriBuilder = builder.build().encode().toUriString();
-			restTemplate.exchange(uriBuilder, HttpMethod.POST, requestBody, String.class);
-		} catch (Exception e) {
-			logger.error("***callSendAPI Exception: {}", e);
-		}
 
 	}
 
