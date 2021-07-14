@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import info.zuyfun.bot.constants.FacebookAPIUrl;
+import info.zuyfun.bot.entity.User;
 import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Message;
 import info.zuyfun.bot.facebook.model.Request;
@@ -24,6 +25,7 @@ import info.zuyfun.bot.facebook.model.RequestRecipient;
 import info.zuyfun.bot.facebook.model.Simsimi;
 import info.zuyfun.bot.facebook.service.MessageService;
 import info.zuyfun.bot.facebook.template.MessageTemplate;
+import info.zuyfun.bot.service.UserService;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -33,8 +35,12 @@ public class MessageServiceImpl implements MessageService {
 
 	@Autowired
 	protected RestTemplate restTemplate;
+
 	@Autowired
 	MessageTemplate messageTemplate;
+
+	@Autowired
+	UserService userService;
 
 	@Override
 	@Async("asyncService")
@@ -43,6 +49,15 @@ public class MessageServiceImpl implements MessageService {
 			testThreadPool();
 			if (objMessage == null)
 				return;
+			User objUser = userService.getByRecipientID(senderID);
+			if (objUser != null) {
+				logger.info("***User object: {}", objUser);
+			} else {
+				User newUser = new User();
+				newUser.setRecipeintID(senderID);
+				newUser.setLastTimeChat(String.valueOf(System.currentTimeMillis()));
+				userService.addUser(newUser);
+			}
 			Request objRequest = new Request();
 			RequestRecipient objRequestRecipient = new RequestRecipient();
 			objRequestRecipient.setId(senderID);
@@ -71,7 +86,9 @@ public class MessageServiceImpl implements MessageService {
 				return;
 			}
 			callSendAPI(objRequest);
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			logger.error("***handleMessage - Exception: {}", e);
 		}
 	}
