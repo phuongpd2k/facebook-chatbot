@@ -29,9 +29,9 @@ import info.zuyfun.bot.service.UserService;
 
 @Service
 public class MessageServiceImpl implements MessageService {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
-	
+
 	@Value("${fb_access_token}")
 	private String FB_ACCESS_TOKEN;
 
@@ -48,7 +48,6 @@ public class MessageServiceImpl implements MessageService {
 	@Async("asyncService")
 	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
-			testThreadPool();
 			if (objMessage == null)
 				return;
 			String timeStamp = String.valueOf(System.currentTimeMillis());
@@ -95,17 +94,6 @@ public class MessageServiceImpl implements MessageService {
 
 		Exception e) {
 			logger.error("***handleMessage - Exception: {}", e);
-		}
-	}
-
-	public void testThreadPool() {
-		for (int i = 0; i < 5; i++) {
-			try {
-				Thread.sleep(1000);
-				logger.info("i=" + i);
-			} catch (Exception e) {
-				logger.info("***loopException : {}", e);
-			}
 		}
 	}
 
