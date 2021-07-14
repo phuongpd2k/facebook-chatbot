@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "user")
+@Table(name = "USER", schema = "public")
 @Data
 public class User implements Serializable {
 	/**
