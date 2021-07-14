@@ -70,7 +70,7 @@ public class MessageServiceImpl implements MessageService {
 			objRequest.setRequestMessage(objRequestMessage);
 
 			if (objMessage.getText() != null) {
-				logger.info("***Attachment object: {}", objMessage);
+				logger.info("***Message object: {}", objMessage);
 				String messageText = objMessage.getText();
 				// Object Attachment
 				if (messageText.contains("/ssm ")) {
@@ -127,8 +127,6 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	public void callSendAPI(Object objRequest) {
-		// Construct the message body
-		// Send the HTTP request to the Messenger Platform
 		logger.info("***API Send Attachment***");
 		try {
 			HttpHeaders headers = new HttpHeaders();
