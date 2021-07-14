@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import info.zuyfun.bot.constants.FacebookAPIUrl;
 import info.zuyfun.bot.entity.User;
+import info.zuyfun.bot.facebook.model.Action;
 import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Message;
 import info.zuyfun.bot.facebook.model.Request;
@@ -101,9 +102,7 @@ public class MessageServiceImpl implements MessageService {
 	@Async("asyncService")
 	public void handlePostback(BigDecimal senderID, String payload) {
 		logger.info("***handlePostback***");
-		// Get the payload for the postback
 
-		// Set the response based on the postback payload
 		Request objRequest = new Request();
 		RequestRecipient objRequestRecipient = new RequestRecipient();
 		objRequestRecipient.setId(senderID);
@@ -163,6 +162,12 @@ public class MessageServiceImpl implements MessageService {
 //		}
 		return result;
 
+	}
+
+	@Override
+	public void typingAction(BigDecimal senderID) {
+		Action objAction = messageTemplate.typingOnAction(senderID);
+		callSendAPI(objAction);
 	}
 
 }

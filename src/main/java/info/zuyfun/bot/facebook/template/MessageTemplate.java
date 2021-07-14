@@ -1,8 +1,12 @@
 package info.zuyfun.bot.facebook.template;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import info.zuyfun.bot.facebook.model.Action;
 import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Button;
 import info.zuyfun.bot.facebook.model.Element;
@@ -11,6 +15,8 @@ import info.zuyfun.bot.facebook.model.Payload;
 public class MessageTemplate {
 
 	Template template;
+	@Autowired
+	Typing typingTemplate;
 
 	public MessageTemplate() {
 		template = new Template();
@@ -30,6 +36,11 @@ public class MessageTemplate {
 		listButton.add(template.buttonPostBack("No!", "no"));
 		return objAttachment;
 	}
+
+	public Action typingOnAction(BigDecimal senderID) {
+		return typingTemplate.typingOn(senderID);
+	}
+
 }
 
 class Template {

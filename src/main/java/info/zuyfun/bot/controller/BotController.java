@@ -64,8 +64,8 @@ public class BotController {
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {
 						// Start for loop
-
 						BigDecimal senderID = event.getSender().getId();
+						service.typingAction(senderID);
 						if (event.getMessage() != null) {
 							service.handleMessage(senderID, event.getMessage());
 						} else if (event.getPostback() != null) {

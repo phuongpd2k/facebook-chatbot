@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 import info.zuyfun.bot.facebook.template.MessageTemplate;
+import info.zuyfun.bot.facebook.template.Typing;
 import info.zuyfun.bot.schedule.HerokuIdle;
 
 @EnableScheduling
@@ -25,5 +26,10 @@ public class BotConfig {
 	@Bean
 	public MessageTemplate messageTemplate() {
 		return new MessageTemplate();
+	}
+
+	@Bean
+	public Typing typingTemplate() {
+		return new Typing();
 	}
 }
