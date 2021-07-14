@@ -60,7 +60,6 @@ public class BotController {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			for (Entry entry : callback.getEntry()) {
-
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {
 						// Start for loop

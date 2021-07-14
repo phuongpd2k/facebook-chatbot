@@ -10,7 +10,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -46,7 +45,7 @@ public class MessageServiceImpl implements MessageService {
 	UserService userService;
 
 	@Override
-	@Async("asyncService")
+//	@Async("asyncService")
 	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
 			if (objMessage == null)
@@ -99,7 +98,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	@Async("asyncService")
+//	@Async("asyncService")
 	public void handlePostback(BigDecimal senderID, String payload) {
 		logger.info("***handlePostback***");
 
