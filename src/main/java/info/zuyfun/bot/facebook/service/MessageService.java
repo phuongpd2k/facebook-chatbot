@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import info.zuyfun.bot.facebook.model.Message;
 
-public interface MessageHandler {
+public interface MessageService {
 	// Handles messages events
 	void handleMessage(BigDecimal senderID, Message message);
 

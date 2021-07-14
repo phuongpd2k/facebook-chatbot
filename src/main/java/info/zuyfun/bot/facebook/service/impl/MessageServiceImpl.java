@@ -1,8 +1,6 @@
 package info.zuyfun.bot.facebook.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +22,12 @@ import info.zuyfun.bot.facebook.model.Request;
 import info.zuyfun.bot.facebook.model.RequestMessage;
 import info.zuyfun.bot.facebook.model.RequestRecipient;
 import info.zuyfun.bot.facebook.model.Simsimi;
-import info.zuyfun.bot.facebook.service.MessageHandler;
+import info.zuyfun.bot.facebook.service.MessageService;
 import info.zuyfun.bot.facebook.template.MessageTemplate;
 
 @Service
-public class EventHandlerImpl implements MessageHandler {
-	private static final Logger logger = LoggerFactory.getLogger(EventHandlerImpl.class);
+public class MessageServiceImpl implements MessageService {
+	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 	@Value("${fb_access_token}")
 	private String FB_ACCESS_TOKEN;
 

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import info.zuyfun.bot.facebook.model.Callback;
 import info.zuyfun.bot.facebook.model.Entry;
 import info.zuyfun.bot.facebook.model.Event;
-import info.zuyfun.bot.facebook.service.MessageHandler;
+import info.zuyfun.bot.facebook.service.MessageService;
 
 @RestController
 public class BotController {
@@ -27,7 +27,7 @@ public class BotController {
 	@Value("${verify_token}")
 	private String VERIFY_TOKEN;
 	@Autowired
-	private MessageHandler service;
+	private MessageService service;
 
 	@RequestMapping("/herokuIdle")
 	public ResponseEntity<Object> herokuNotIdle() {

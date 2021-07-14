@@ -3,16 +3,12 @@ package info.zuyfun.bot.facebook.template;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Button;
 import info.zuyfun.bot.facebook.model.Element;
 import info.zuyfun.bot.facebook.model.Payload;
 
 public class MessageTemplate {
-	private static final Logger logger = LoggerFactory.getLogger(MessageTemplate.class);
 
 	Template template;
 
@@ -21,8 +17,11 @@ public class MessageTemplate {
 	}
 
 	public Attachment testPayload(String imageUrl) {
-		Attachment objAttachment = template.attachmentPostback();
-		logger.info("***objAttachment: {}", objAttachment);
+		Attachment objAttachment = new Attachment();
+		objAttachment.setType("template");
+		objAttachment.setPayload(template.payloadPostBack());
+		List<Element> listElement = new ArrayList<Element>();
+		objAttachment.getPayload().setElements(listElement);
 		objAttachment.getPayload().getElements()
 				.add(template.elementPostBack("Is this the right picture?", "Tap a button to answer.", imageUrl));
 		List<Button> listButton = new ArrayList<Button>();
