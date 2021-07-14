@@ -49,13 +49,15 @@ public class MessageServiceImpl implements MessageService {
 			testThreadPool();
 			if (objMessage == null)
 				return;
+			String timeStamp = String.valueOf(System.currentTimeMillis());
 			User objUser = userService.getByRecipientID(senderID);
 			if (objUser != null) {
-				logger.info("***User object: {}", objUser.getRecipeintID());
+				objUser.setLastTimeChat(timeStamp);
+				userService.saveUser(objUser);
 			} else {
 				User newUser = new User();
 				newUser.setRecipeintID(senderID);
-				newUser.setLastTimeChat(String.valueOf(System.currentTimeMillis()));
+				newUser.setLastTimeChat(timeStamp);
 				userService.addUser(newUser);
 			}
 			Request objRequest = new Request();
