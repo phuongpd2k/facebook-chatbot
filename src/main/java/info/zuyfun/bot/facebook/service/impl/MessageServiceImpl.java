@@ -51,7 +51,7 @@ public class MessageServiceImpl implements MessageService {
 				return;
 			User objUser = userService.getByRecipientID(senderID);
 			if (objUser != null) {
-				logger.info("***User object: {}", objUser);
+				logger.info("***User object: {}", objUser.getRecipeintID());
 			} else {
 				User newUser = new User();
 				newUser.setRecipeintID(senderID);
