@@ -21,11 +21,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getByRecipientID(BigDecimal recipientID) {
 		try {
-			return userRepository.getById(recipientID);
+			if (userRepository.existsById(recipientID))
+				return userRepository.getById(recipientID);
 		} catch (Exception e) {
 			logger.error("***getByRecipientID Exception: {}", e);
-			return null;
 		}
+		return null;
 	}
 
 	@Override

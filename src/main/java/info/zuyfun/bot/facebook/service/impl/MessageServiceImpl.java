@@ -51,6 +51,7 @@ public class MessageServiceImpl implements MessageService {
 				return;
 			String timeStamp = String.valueOf(System.currentTimeMillis());
 			User objUser = userService.getByRecipientID(senderID);
+			logger.info("***User object: {}", objUser);
 			if (objUser != null) {
 				objUser.setLastTimeChat(timeStamp);
 				userService.saveUser(objUser);
