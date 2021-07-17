@@ -26,8 +26,6 @@ public class MessageTemplate {
 		template = new Template();
 	}
 
-
-
 	public Attachment testPayload(String imageUrl) {
 		Attachment objAttachment = new Attachment();
 		objAttachment.setType("template");
@@ -66,7 +64,7 @@ public class MessageTemplate {
 		RequestMessage objRequestMessage = new RequestMessage();
 		objRequest.setRequestMessage(objRequestMessage);
 		objRequestMessage.setAttachment(attachmentMessage);
-		return null;
+		return objRequest;
 	}
 
 }
