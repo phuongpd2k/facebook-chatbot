@@ -122,6 +122,7 @@ public class MessageServiceImpl implements MessageService {
 			}
 			if (objRequest == null)
 				return;
+			logger.info("***objRequest object: {}", objRequest);
 			callSendAPI(objRequest);
 		} catch (Exception e) {
 			logger.error("***handleMessage - Exception: {}", e);
