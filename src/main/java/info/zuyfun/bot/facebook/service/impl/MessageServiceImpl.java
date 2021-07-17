@@ -164,7 +164,7 @@ public class MessageServiceImpl implements MessageService {
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 			String url = builder.build().encode().toUriString();
 			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-			System.out.println(res);
+			logger.error("***callSimsimi response: {}", res);
 		} catch (Exception e) {
 			logger.error("***callSimsimi Exception: {}", e);
 		}
