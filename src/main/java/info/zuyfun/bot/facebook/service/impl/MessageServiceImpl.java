@@ -154,9 +154,9 @@ public class MessageServiceImpl implements MessageService {
 		try {
 			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ChatBotAPIUrl.SIMSIMI)
 					.queryParam("text", messageText).queryParam("lang", "vi_VN");
-			logger.info("***Uri : {}", builder);
 
 			String uriBuilder = builder.build().encode().toUriString();
+			logger.info("***Uri : {}", uriBuilder);
 			ResponseEntity<String> ResponseEntity = restTemplate.getForEntity(uriBuilder, String.class);
 			logger.info("***callSimsimi : {}", ResponseEntity.getBody());
 			return null;
