@@ -117,6 +117,7 @@ public class MessageServiceImpl implements MessageService {
 				String attachmentUrl = objMessage.getAttachments().get(0).getPayload().getUrl();
 				Attachment objAttachment = messageTemplate.testPayload(attachmentUrl);
 				objRequest = messageTemplate.sendAttachment(senderID, objAttachment);
+				logger.info("***objRequest object: {}", objRequest);
 			} else {
 				return;
 			}
