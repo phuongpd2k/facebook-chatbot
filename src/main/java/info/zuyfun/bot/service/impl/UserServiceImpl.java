@@ -11,6 +11,7 @@ import info.zuyfun.bot.entity.User;
 import info.zuyfun.bot.repository.UserRepository;
 import info.zuyfun.bot.service.UserService;
 
+
 @Service
 public class UserServiceImpl implements UserService {
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -18,11 +19,12 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
 
+
 	@Override
-	public User getByRecipientID(BigDecimal recipientID) {
+	public User getBySenderID(BigDecimal senderID) {
 		try {
-			if (userRepository.existsById(recipientID))
-				return userRepository.getById(recipientID);
+			if (userRepository.existsById(senderID))
+				return userRepository.getById(senderID);
 		} catch (Exception e) {
 			logger.error("***getByRecipientID Exception: {}", e);
 		}
@@ -44,6 +46,46 @@ public class UserServiceImpl implements UserService {
 			userRepository.save(user);
 		} catch (Exception e) {
 			logger.error("***saveUser Exception: {}", e);
+		}
+	}
+
+	@Override
+	public boolean isChatWithBot(BigDecimal senderID) {
+		try {
+			User objUser = getBySenderID(senderID);
+			if (objUser == null)
+				return false;
+			if (objUser.isChatWithBot())
+				return true;
+		} catch (Exception e) {
+			logger.error("***isChatWithBot Exception: {}", e);
+		}
+		return false;
+	}
+
+	@Override
+	public void updateIsChatWithBot(BigDecimal senderID) {
+		try {
+			User objUser = getBySenderID(senderID);
+			if (objUser == null)
+				return;
+			objUser.setChatWithBot(true);
+			userRepository.save(objUser);
+		} catch (Exception e) {
+			logger.error("***isChatWithBot Exception: {}", e);
+		}
+	}
+
+	@Override
+	public void updateIsNotificationKQXS(BigDecimal senderID) {
+		try {
+			User objUser = getBySenderID(senderID);
+			if (objUser == null)
+				return;
+			objUser.setNotificationKQXS(true);
+			userRepository.save(objUser);
+		} catch (Exception e) {
+			logger.error("***isChatWithBot Exception: {}", e);
 		}
 	}
 }

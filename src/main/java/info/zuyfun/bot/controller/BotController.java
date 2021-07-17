@@ -28,6 +28,8 @@ public class BotController {
 	private String VERIFY_TOKEN;
 	@Autowired
 	private MessageService service;
+	public static final String ON = "on";
+	public static final String OFF = "off";
 
 	@RequestMapping("/herokuIdle")
 	public ResponseEntity<Object> herokuNotIdle() {
@@ -62,9 +64,8 @@ public class BotController {
 			for (Entry entry : callback.getEntry()) {
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {
-						// Start for loop
 						BigDecimal senderID = event.getSender().getId();
-						service.typingAction(senderID);
+						service.typingAction(senderID, ON);
 						if (event.getMessage() != null) {
 							service.handleMessage(senderID, event.getMessage());
 						} else if (event.getPostback() != null) {
@@ -73,9 +74,8 @@ public class BotController {
 							logger.info("***Callback/Event type not supported: {}", event);
 							return ResponseEntity.ok("Callback not supported yet!");
 						}
+						service.typingAction(senderID, OFF);
 					}
-
-					// Stop for loop
 				}
 			}
 		} catch (Exception e) {

@@ -11,16 +11,22 @@ import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Button;
 import info.zuyfun.bot.facebook.model.Element;
 import info.zuyfun.bot.facebook.model.Payload;
+import info.zuyfun.bot.facebook.model.Request;
+import info.zuyfun.bot.facebook.model.RequestMessage;
+import info.zuyfun.bot.facebook.model.RequestRecipient;
 
 public class MessageTemplate {
 
 	Template template;
+
 	@Autowired
 	Typing typingTemplate;
 
 	public MessageTemplate() {
 		template = new Template();
 	}
+
+
 
 	public Attachment testPayload(String imageUrl) {
 		Attachment objAttachment = new Attachment();
@@ -37,8 +43,30 @@ public class MessageTemplate {
 		return objAttachment;
 	}
 
-	public Action typingOnAction(BigDecimal senderID) {
-		return typingTemplate.typingOn(senderID);
+	public Action typingAction(BigDecimal senderID, String action) {
+		return typingTemplate.typingAction(senderID, action);
+	}
+
+	public Request sendText(BigDecimal recipentID, String textMessage) {
+		Request objRequest = new Request();
+		RequestRecipient objRequestRecipient = new RequestRecipient();
+		objRequestRecipient.setId(recipentID);
+		objRequest.setRequestRecipient(objRequestRecipient);
+		RequestMessage objRequestMessage = new RequestMessage();
+		objRequest.setRequestMessage(objRequestMessage);
+		objRequestMessage.setText(textMessage);
+		return objRequest;
+	}
+
+	public Request sendAttachment(BigDecimal recipentID, Attachment attachmentMessage) {
+		Request objRequest = new Request();
+		RequestRecipient objRequestRecipient = new RequestRecipient();
+		objRequestRecipient.setId(recipentID);
+		objRequest.setRequestRecipient(objRequestRecipient);
+		RequestMessage objRequestMessage = new RequestMessage();
+		objRequest.setRequestMessage(objRequestMessage);
+		objRequestMessage.setAttachment(attachmentMessage);
+		return null;
 	}
 
 }

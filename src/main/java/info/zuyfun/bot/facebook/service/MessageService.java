@@ -11,5 +11,5 @@ public interface MessageService {
 	// Handles messaging_postbacks events
 	void handlePostback(BigDecimal senderID, String payload);
 
-	void typingAction(BigDecimal senderID);
+	void typingAction(BigDecimal senderID, String action);
 }

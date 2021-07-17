@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import info.zuyfun.bot.facebook.template.MessageTemplate;
 import info.zuyfun.bot.facebook.template.Typing;
 import info.zuyfun.bot.schedule.HerokuIdle;
+import info.zuyfun.bot.utils.UserAction;
 
 @EnableScheduling
 @Configuration
@@ -31,5 +32,10 @@ public class BotConfig {
 	@Bean
 	public Typing typingTemplate() {
 		return new Typing();
+	}
+
+	@Bean
+	public UserAction userAction() {
+		return new UserAction();
 	}
 }

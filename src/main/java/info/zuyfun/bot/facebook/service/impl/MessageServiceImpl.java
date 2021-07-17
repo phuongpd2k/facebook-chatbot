@@ -15,17 +15,16 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import info.zuyfun.bot.constants.FacebookAPIUrl;
-import info.zuyfun.bot.entity.User;
+import info.zuyfun.bot.constants.MessageConstants;
 import info.zuyfun.bot.facebook.model.Action;
 import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Message;
 import info.zuyfun.bot.facebook.model.Request;
-import info.zuyfun.bot.facebook.model.RequestMessage;
-import info.zuyfun.bot.facebook.model.RequestRecipient;
 import info.zuyfun.bot.facebook.model.Simsimi;
 import info.zuyfun.bot.facebook.service.MessageService;
 import info.zuyfun.bot.facebook.template.MessageTemplate;
 import info.zuyfun.bot.service.UserService;
+import info.zuyfun.bot.utils.UserAction;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -34,7 +33,8 @@ public class MessageServiceImpl implements MessageService {
 
 	@Value("${fb_access_token}")
 	private String FB_ACCESS_TOKEN;
-
+	@Autowired
+	UserAction userAction;
 	@Autowired
 	protected RestTemplate restTemplate;
 
@@ -61,54 +61,53 @@ public class MessageServiceImpl implements MessageService {
 
 	}
 
+	public void callGetUserAPI(BigDecimal senderID) {
+		logger.info("***API Send Attachment***");
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<Object> requestBody = new HttpEntity<>(headers);
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(FacebookAPIUrl.SEND_MESSAGE + senderID)
+					.queryParam("fields", "first_name,last_name,profile_pic")
+					.queryParam("access_token", FB_ACCESS_TOKEN);
+			String uriBuilder = builder.build().encode().toUriString();
+			String a = restTemplate.exchange(uriBuilder, HttpMethod.GET, requestBody, String.class).toString();
+			logger.info("***callGetUserAPI : {}", a);
+
+		} catch (Exception e) {
+			logger.error("***callGetUserAPI Exception: {}", e);
+		}
+
+	}
+
 	@Override
 	public void handleMessage(BigDecimal senderID, Message objMessage) {
 		try {
 			if (objMessage == null)
 				return;
-			String timeStamp = String.valueOf(System.currentTimeMillis());
-			User objUser = userService.getByRecipientID(senderID);
-			logger.info("***User object: {}", objUser);
-			if (objUser != null) {
-				objUser.setLastTimeChat(timeStamp);
-				userService.saveUser(objUser);
-			} else {
-				User newUser = new User();
-				newUser.setRecipeintID(senderID);
-				newUser.setLastTimeChat(timeStamp);
-				userService.addUser(newUser);
-			}
-			Request objRequest = new Request();
-			RequestRecipient objRequestRecipient = new RequestRecipient();
-			objRequestRecipient.setId(senderID);
-			objRequest.setRequestRecipient(objRequestRecipient);
-			RequestMessage objRequestMessage = new RequestMessage();
-			objRequest.setRequestMessage(objRequestMessage);
-
+			Request objRequest = null;
 			if (objMessage.getText() != null) {
 				logger.info("***Message object: {}", objMessage);
-				String messageText = objMessage.getText();
-				// Object Attachment
-				if (messageText.contains("/ssm ")) {
-					Simsimi simsimi = callSimsimi(messageText.replace("/ssm ", ""));
-					if (simsimi == null)
-						return;
-					objRequestMessage.setText(simsimi.getSuccess());
+				String messageText = objMessage.getText().toLowerCase();
+				if (userAction.isCommand(messageText)) {
+
+				} else if (userService.isChatWithBot(senderID)) {
+					// Call simsimi here
 				} else {
-					objRequestMessage.setText(messageText);
+					objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
 				}
 			} else if (objMessage.getAttachments() != null || objMessage.getAttachments().isEmpty()) {
 				logger.info("***Payload object: {}", objMessage.getAttachments());
 				String attachmentUrl = objMessage.getAttachments().get(0).getPayload().getUrl();
 				Attachment objAttachment = messageTemplate.testPayload(attachmentUrl);
-				objRequestMessage.setAttachment(objAttachment);
+				objRequest = messageTemplate.sendAttachment(senderID, objAttachment);
 			} else {
 				return;
 			}
+			if (objRequest == null)
+				return;
 			callSendAPI(objRequest);
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			logger.error("***handleMessage - Exception: {}", e);
 		}
 	}
@@ -117,52 +116,37 @@ public class MessageServiceImpl implements MessageService {
 	public void handlePostback(BigDecimal senderID, String payload) {
 		logger.info("***handlePostback***");
 
-		Request objRequest = new Request();
-		RequestRecipient objRequestRecipient = new RequestRecipient();
-		objRequestRecipient.setId(senderID);
-		objRequest.setRequestRecipient(objRequestRecipient);
-		RequestMessage objRequestMessage = new RequestMessage();
-		objRequest.setRequestMessage(objRequestMessage);
+		Request objRequest = null;
 		switch (payload) {
 		case "yes":
-			objRequestMessage.setText("Cảm ơn!");
+			callGetUserAPI(senderID);
+			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_YES);
 			break;
 		case "no":
-			objRequestMessage.setText("Oops, Hãy thử lại tấm ảnh khác!");
+			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_NO);
 			break;
 		case "GET_STARTED":
-			objRequestMessage.setText("Ồ lần đầu à :o");
+		
+			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_GET_STARTED);
 			break;
 		default:
-			objRequestMessage.setText("Oops!!!");
+			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_DEFAULT);
 			break;
 		}
-		callSendAPI(objRequest);
+		if (objRequest != null)
+			callSendAPI(objRequest);
+	}
 
+	@Override
+	public void typingAction(BigDecimal senderID, String action) {
+		Action objAction = messageTemplate.typingAction(senderID, action);
+		callSendAPI(objAction);
 	}
 
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
-
 		Simsimi result = null;
-//		webClient = WebClient.create(SIMSIMI_URL);
-//		try {
-//			Flux<Simsimi> flux = webClient.get().uri("?text=" + messageText + "&lang=vi_VN").retrieve()
-//					.bodyToFlux(Simsimi.class);
-//			result = flux.blockFirst() == null ? null : flux.blockFirst();
-//			logger.info("***Simsimi Response {}", result);
-//
-//		} catch (Exception ex) {
-//			logger.error("***callSimsimi Exception: {}", ex);
-//		}
 		return result;
-
-	}
-
-	@Override
-	public void typingAction(BigDecimal senderID) {
-		Action objAction = messageTemplate.typingOnAction(senderID);
-		callSendAPI(objAction);
 	}
 
 }
