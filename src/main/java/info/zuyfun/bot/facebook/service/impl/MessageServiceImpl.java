@@ -175,13 +175,14 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	public void patternCommand(BigDecimal senderID, String messageText) {
-		String[] textArray = messageText.split("//s+");
+		String[] textArray = messageText.split("\\s+");
 		logger.info("***textArray : {}", textArray);
 		Request objRequest = null;
 		try {
 			if (textArray.length == 1) {
 				objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
 			} else if (textArray.length > 1) {
+				logger.info("***textArray.length > 1 : {}", textArray);
 				if (textArray[0].equals(CommandConstants.CHAT_WITH_BOT)) {
 					if (textArray[1].equals(CommandConstants.ON)) {
 						userService.updateIsChatWithBot(senderID, true);
