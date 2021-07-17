@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.zuyfun.bot.constants.FacebookAPIUrl;
 import info.zuyfun.bot.constants.MessageConstants;
+import info.zuyfun.bot.constants.PayloadConstants;
 import info.zuyfun.bot.facebook.model.Action;
 import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Message;
@@ -122,26 +123,16 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public void handlePostback(BigDecimal senderID, String payload) {
 		logger.info("***handlePostback***");
-
-		Request objRequest = null;
 		switch (payload) {
 		case "yes":
-			callGetUserAPI(senderID);
-			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_YES);
+			payloadGetStarted(senderID);
 			break;
-		case "no":
-			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_NO);
-			break;
-		case "GET_STARTED":
-
-			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_GET_STARTED);
+		case PayloadConstants.GET_STARTED:
+			payloadGetStarted(senderID);
 			break;
 		default:
-			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_DEFAULT);
 			break;
 		}
-		if (objRequest != null)
-			callSendAPI(objRequest);
 	}
 
 	@Override
@@ -154,6 +145,14 @@ public class MessageServiceImpl implements MessageService {
 		logger.info("***Call Simsimi***");
 		Simsimi result = null;
 		return result;
+	}
+
+	public void payloadGetStarted(BigDecimal senderID) {
+		Profile userProfile = callGetUserAPI(senderID);
+		String fullName = userProfile.getLastName() + "" + userProfile.getFirstName();
+		String messageText = MessageConstants.PAYLOAD_GET_STARTED.replace("username", fullName);
+		Request objRequest = messageTemplate.sendText(senderID, messageText);
+		callSendAPI(objRequest);
 	}
 
 }
