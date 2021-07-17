@@ -149,8 +149,7 @@ public class MessageServiceImpl implements MessageService {
 
 	public void payloadGetStarted(BigDecimal senderID) {
 		Profile userProfile = callGetUserAPI(senderID);
-		String fullName = userProfile.getLastName() + "" + userProfile.getFirstName();
-		String messageText = MessageConstants.PAYLOAD_GET_STARTED.replace("username", fullName);
+		String messageText = MessageConstants.PAYLOAD_GET_STARTED.replace("username", userProfile.getFirstName());
 		Request objRequest = messageTemplate.sendText(senderID, messageText);
 		callSendAPI(objRequest);
 	}
