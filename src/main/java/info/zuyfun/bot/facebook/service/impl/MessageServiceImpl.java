@@ -182,7 +182,7 @@ public class MessageServiceImpl implements MessageService {
 			if (textArray.length == 1) {
 				objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
 			} else if (textArray.length > 1) {
-				logger.info("***textArray.length > 1 : {}", textArray);
+				logger.info("***textArray.length > 1 : {}", textArray[1]);
 				if (textArray[0].equals(CommandConstants.CHAT_WITH_BOT)) {
 					if (textArray[1].equals(CommandConstants.ON)) {
 						userService.updateIsChatWithBot(senderID, true);
