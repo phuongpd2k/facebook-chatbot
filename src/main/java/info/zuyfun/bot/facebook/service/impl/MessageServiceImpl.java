@@ -67,7 +67,7 @@ public class MessageServiceImpl implements MessageService {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity<Object> requestBody = new HttpEntity<>(headers);
-			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(FacebookAPIUrl.SEND_MESSAGE + senderID)
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(FacebookAPIUrl.GET_PROFILE + senderID)
 					.queryParam("fields", "first_name,last_name,profile_pic")
 					.queryParam("access_token", FB_ACCESS_TOKEN);
 			String uriBuilder = builder.build().encode().toUriString();
@@ -126,7 +126,7 @@ public class MessageServiceImpl implements MessageService {
 			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_NO);
 			break;
 		case "GET_STARTED":
-		
+
 			objRequest = messageTemplate.sendText(senderID, MessageConstants.PAYLOAD_GET_STARTED);
 			break;
 		default:
