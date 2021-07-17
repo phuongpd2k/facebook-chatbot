@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import info.zuyfun.bot.facebook.template.MessageTemplate;
 import info.zuyfun.bot.facebook.template.Typing;
 import info.zuyfun.bot.schedule.HerokuIdle;
@@ -37,5 +39,10 @@ public class BotConfig {
 	@Bean
 	public UserAction userAction() {
 		return new UserAction();
+	}
+
+	@Bean
+	ObjectMapper mapper() {
+		return new ObjectMapper();
 	}
 }

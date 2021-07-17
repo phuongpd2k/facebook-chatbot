@@ -14,11 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import info.zuyfun.bot.constants.FacebookAPIUrl;
 import info.zuyfun.bot.constants.MessageConstants;
 import info.zuyfun.bot.facebook.model.Action;
 import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Message;
+import info.zuyfun.bot.facebook.model.Profile;
 import info.zuyfun.bot.facebook.model.Request;
 import info.zuyfun.bot.facebook.model.Simsimi;
 import info.zuyfun.bot.facebook.service.MessageService;
@@ -43,6 +46,8 @@ public class MessageServiceImpl implements MessageService {
 
 	@Autowired
 	UserService userService;
+	@Autowired
+	ObjectMapper mapper;
 
 	public void callSendAPI(Object objRequest) {
 		logger.info("***API Send Attachment***");
@@ -61,7 +66,7 @@ public class MessageServiceImpl implements MessageService {
 
 	}
 
-	public void callGetUserAPI(BigDecimal senderID) {
+	public Profile callGetUserAPI(BigDecimal senderID) {
 		logger.info("***API GET PROFILE***");
 		try {
 			HttpHeaders headers = new HttpHeaders();
@@ -71,13 +76,15 @@ public class MessageServiceImpl implements MessageService {
 					.queryParam("fields", "first_name,last_name,profile_pic")
 					.queryParam("access_token", FB_ACCESS_TOKEN);
 			String uriBuilder = builder.build().encode().toUriString();
-			String a = restTemplate.exchange(uriBuilder, HttpMethod.GET, requestBody, String.class).getBody();
-			logger.info("***callGetUserAPI : {}", a);
-
+			String bodyResponse = restTemplate.exchange(uriBuilder, HttpMethod.GET, requestBody, String.class)
+					.getBody();
+			Profile objProfile = mapper.readValue(bodyResponse, Profile.class);
+			logger.info("***callGetUserAPI : {}", objProfile);
+			return objProfile;
 		} catch (Exception e) {
 			logger.error("***callGetUserAPI Exception: {}", e);
 		}
-
+		return null;
 	}
 
 	@Override
