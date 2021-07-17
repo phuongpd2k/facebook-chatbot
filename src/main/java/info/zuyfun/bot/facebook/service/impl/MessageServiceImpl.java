@@ -155,7 +155,7 @@ public class MessageServiceImpl implements MessageService {
 					.queryParam("text", messageText).queryParam("lang", "vi_VN");
 			String uriBuilder = builder.build().encode().toUriString();
 			logger.info("***callSimsimi : {}", uriBuilder);
-			String bodyResponse = restTemplate.getForEntity(uriBuilder, String.class).getBody();
+			String bodyResponse = restTemplate.getForObject(uriBuilder, String.class);
 			Simsimi objSimsimi = mapper.readValue(bodyResponse, Simsimi.class);
 			logger.info("***callSimsimi : {}", objSimsimi);
 			return objSimsimi;
