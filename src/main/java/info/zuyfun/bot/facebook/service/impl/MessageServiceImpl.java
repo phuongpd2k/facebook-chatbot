@@ -151,14 +151,16 @@ public class MessageServiceImpl implements MessageService {
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
 		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<Object> requestBody = new HttpEntity<>(headers);
 			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ChatBotAPIUrl.SIMSIMI)
 					.queryParam("text", messageText).queryParam("lang", "vi_VN");
 			String uriBuilder = builder.build().encode().toUriString();
-			logger.info("***callSimsimi : {}", uriBuilder);
-			String bodyResponse = restTemplate.getForObject(uriBuilder, String.class);
-			Simsimi objSimsimi = mapper.readValue(bodyResponse, Simsimi.class);
-			logger.info("***callSimsimi : {}", objSimsimi);
-			return objSimsimi;
+			String bodyResponse = restTemplate.exchange(uriBuilder, HttpMethod.GET, requestBody, String.class)
+					.getBody();
+			logger.info("***callSimsimi : {}", bodyResponse);
+			return null;
 		} catch (Exception e) {
 			logger.error("***callSimsimi Exception: {}", e);
 		}
