@@ -183,17 +183,16 @@ public class MessageServiceImpl implements MessageService {
 			if (textArray.length == 1) {
 				objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
 			} else if (textArray.length > 1) {
-				logger.info("***textArray.length > 1 : {}", textArray[1]);
+
 				if (textArray[0].equals(CommandConstants.CHAT_WITH_BOT)) {
 					if (textArray[1].equals(CommandConstants.ON)) {
+						logger.info("***textArray.length > 1 : {}", textArray[1]);
 						userService.updateIsChatWithBot(senderID, true);
 						objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_ON_CHAT_BOT);
-						return;
 					}
 					if (textArray[1].equals(CommandConstants.OFF)) {
 						userService.updateIsChatWithBot(senderID, false);
 						objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_OFF_CHAT_BOT);
-						return;
 					}
 				}
 			} else {
