@@ -62,7 +62,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	public void callGetUserAPI(BigDecimal senderID) {
-		logger.info("***API Send Attachment***");
+		logger.info("***API GET PROFILE***");
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -71,7 +71,7 @@ public class MessageServiceImpl implements MessageService {
 					.queryParam("fields", "first_name,last_name,profile_pic")
 					.queryParam("access_token", FB_ACCESS_TOKEN);
 			String uriBuilder = builder.build().encode().toUriString();
-			String a = restTemplate.exchange(uriBuilder, HttpMethod.GET, requestBody, String.class).toString();
+			String a = restTemplate.exchange(uriBuilder, HttpMethod.GET, requestBody, String.class).getBody();
 			logger.info("***callGetUserAPI : {}", a);
 
 		} catch (Exception e) {
