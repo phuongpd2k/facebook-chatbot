@@ -53,7 +53,7 @@ public class MessageServiceImpl implements MessageService {
 	ObjectMapper mapper;
 
 	public void callSendAPI(Object objRequest) {
-		logger.info("***API Send Attachment***");
+		logger.info("***API Send***");
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -98,6 +98,7 @@ public class MessageServiceImpl implements MessageService {
 			Request objRequest = null;
 			if (objMessage.getText() != null) {
 				logger.info("***Message object: {}", objMessage);
+				logger.info("***User object: {}", userService.getBySenderID(senderID));
 				String messageText = objMessage.getText().toLowerCase();
 				if (userAction.isCommand(messageText)) {
 					patternCommand(senderID, messageText);
