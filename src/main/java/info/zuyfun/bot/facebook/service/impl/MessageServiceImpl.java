@@ -159,9 +159,7 @@ public class MessageServiceImpl implements MessageService {
 
 			String uriBuilder = builder.build().encode().toUriString();
 			logger.info("***Uri : {}", uriBuilder);
-			ResponseEntity<String> ResponseEntity = restTemplate
-					.getForEntity("https://api.simsimi.net/v1/?text=h&lang=vi_VN", String.class);
-			logger.info("***callSimsimi : {}", ResponseEntity.getBody());
+			restTemplate.getForObject("https://api.simsimi.net/v1/?text=h&lang=vi_VN", String.class);
 			return null;
 		} catch (Exception e) {
 			logger.error("***callSimsimi Exception: {}", e);
