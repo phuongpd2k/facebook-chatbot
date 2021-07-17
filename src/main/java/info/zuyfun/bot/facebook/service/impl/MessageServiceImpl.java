@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -151,15 +152,13 @@ public class MessageServiceImpl implements MessageService {
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
 		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			HttpEntity<Object> requestBody = new HttpEntity<>(headers);
 			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ChatBotAPIUrl.SIMSIMI)
 					.queryParam("text", messageText).queryParam("lang", "vi_VN");
+			logger.info("***Uri : {}", builder);
+
 			String uriBuilder = builder.build().encode().toUriString();
-			String bodyResponse = restTemplate.exchange(uriBuilder, HttpMethod.GET, requestBody, String.class)
-					.getBody();
-			logger.info("***callSimsimi : {}", bodyResponse);
+			ResponseEntity<String> ResponseEntity = restTemplate.getForEntity(uriBuilder, String.class);
+			logger.info("***callSimsimi : {}", ResponseEntity.getBody());
 			return null;
 		} catch (Exception e) {
 			logger.error("***callSimsimi Exception: {}", e);
