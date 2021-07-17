@@ -11,14 +11,12 @@ import info.zuyfun.bot.entity.User;
 import info.zuyfun.bot.repository.UserRepository;
 import info.zuyfun.bot.service.UserService;
 
-
 @Service
 public class UserServiceImpl implements UserService {
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	UserRepository userRepository;
-
 
 	@Override
 	public User getBySenderID(BigDecimal senderID) {
@@ -64,12 +62,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateIsChatWithBot(BigDecimal senderID) {
+	public void updateIsChatWithBot(BigDecimal senderID, boolean isChat) {
 		try {
 			User objUser = getBySenderID(senderID);
 			if (objUser == null)
 				return;
-			objUser.setChatWithBot(true);
+			objUser.setChatWithBot(isChat);
 			userRepository.save(objUser);
 		} catch (Exception e) {
 			logger.error("***isChatWithBot Exception: {}", e);
@@ -77,12 +75,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateIsNotificationKQXS(BigDecimal senderID) {
+	public void updateIsNotificationKQXS(BigDecimal senderID, boolean isNoti) {
 		try {
 			User objUser = getBySenderID(senderID);
 			if (objUser == null)
 				return;
-			objUser.setNotificationKQXS(true);
+			objUser.setNotificationKQXS(isNoti);
 			userRepository.save(objUser);
 		} catch (Exception e) {
 			logger.error("***isChatWithBot Exception: {}", e);

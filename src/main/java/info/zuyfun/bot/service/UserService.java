@@ -13,7 +13,7 @@ public interface UserService {
 
 	boolean isChatWithBot(BigDecimal senderID);
 
-	void updateIsChatWithBot(BigDecimal senderID);
+	void updateIsChatWithBot(BigDecimal senderID, boolean isChat);
 
-	void updateIsNotificationKQXS(BigDecimal senderID);
+	void updateIsNotificationKQXS(BigDecimal senderID, boolean isNoti);
 }

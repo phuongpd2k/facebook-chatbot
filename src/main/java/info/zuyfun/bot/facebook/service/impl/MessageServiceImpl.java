@@ -16,6 +16,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import info.zuyfun.bot.constants.ChatBotAPIUrl;
+import info.zuyfun.bot.constants.CommandConstants;
 import info.zuyfun.bot.constants.FacebookAPIUrl;
 import info.zuyfun.bot.constants.MessageConstants;
 import info.zuyfun.bot.constants.PayloadConstants;
@@ -98,9 +100,13 @@ public class MessageServiceImpl implements MessageService {
 				logger.info("***Message object: {}", objMessage);
 				String messageText = objMessage.getText().toLowerCase();
 				if (userAction.isCommand(messageText)) {
-
+					patternCommand(senderID, messageText);
 				} else if (userService.isChatWithBot(senderID)) {
 					// Call simsimi here
+					Simsimi objSim = callSimsimi(messageText);
+					if (objSim != null) {
+						objRequest = messageTemplate.sendText(senderID, objSim.getSuccess());
+					}
 				} else {
 					objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
 				}
@@ -143,8 +149,22 @@ public class MessageServiceImpl implements MessageService {
 
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
-		Simsimi result = null;
-		return result;
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<Object> requestBody = new HttpEntity<>(headers);
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ChatBotAPIUrl.SIMSIMI)
+					.queryParam("text", messageText).queryParam("lang", "vi_VN");
+			String uriBuilder = builder.build().encode().toUriString();
+			String bodyResponse = restTemplate.exchange(uriBuilder, HttpMethod.GET, requestBody, String.class)
+					.getBody();
+			Simsimi objSimsimi = mapper.readValue(bodyResponse, Simsimi.class);
+			logger.info("***callSimsimi : {}", objSimsimi);
+			return objSimsimi;
+		} catch (Exception e) {
+			logger.error("***callSimsimi Exception: {}", e);
+		}
+		return null;
 	}
 
 	public void payloadGetStarted(BigDecimal senderID) {
@@ -152,6 +172,35 @@ public class MessageServiceImpl implements MessageService {
 		String messageText = MessageConstants.PAYLOAD_GET_STARTED.replace("username", userProfile.getFirstName());
 		Request objRequest = messageTemplate.sendText(senderID, messageText);
 		callSendAPI(objRequest);
+	}
+
+	public void patternCommand(BigDecimal senderID, String messageText) {
+		String[] textArray = messageText.split("//s+");
+		Request objRequest = null;
+		try {
+			if (textArray.length == 1) {
+				objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
+			} else if (textArray.length > 1) {
+				if (textArray[0].equals(CommandConstants.CHAT_WITH_BOT)) {
+					if (textArray[1].equals(CommandConstants.ON)) {
+						userService.updateIsChatWithBot(senderID, true);
+						objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_ON_CHAT_BOT);
+						return;
+					}
+					if (textArray[1].equals(CommandConstants.OFF)) {
+						userService.updateIsChatWithBot(senderID, false);
+						objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_OFF_CHAT_BOT);
+						return;
+					}
+				}
+			} else {
+				objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
+			}
+			callSendAPI(objRequest);
+		} catch (Exception e) {
+			logger.error("***patternCommand Exception: {}", e);
+		}
+
 	}
 
 }
