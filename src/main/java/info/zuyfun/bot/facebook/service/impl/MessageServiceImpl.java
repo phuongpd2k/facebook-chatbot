@@ -176,7 +176,7 @@ public class MessageServiceImpl implements MessageService {
 
 	public void patternCommand(BigDecimal senderID, String messageText) {
 		String[] textArray = messageText.split("//s+");
-		logger.info("***textArray : {}", textArray);
+		logger.info("***textArray : {}", textArray.length);
 		Request objRequest = null;
 		try {
 			if (textArray.length == 1) {
