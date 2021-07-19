@@ -165,15 +165,12 @@ public class MessageServiceImpl implements MessageService {
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
 		try {
-//			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ChatBotAPIUrl.SIMSIMI)
-//					.queryParam("text", messageText).queryParam("lang", "vi_VN");
-			URI uri = UriComponentsBuilder.fromHttpUrl(ChatBotAPIUrl.SIMSIMI).queryParam("text", messageText)
-					.queryParam("lang", "vi_VN").build(true).toUri();
+			String url = ChatBotAPIUrl.SIMSIMI;
+			url.replace("field", messageText);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Accept", "*/*");
 			headers.add("User-Agent", "PostmanRuntime/7.28.2");
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-			String url = uri.toString();
 			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 			logger.info("***URL: {}", url);
 			logger.info("***res REsponse: {}", res.getBody());
