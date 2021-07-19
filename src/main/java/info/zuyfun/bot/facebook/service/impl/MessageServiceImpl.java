@@ -145,10 +145,8 @@ public class MessageServiceImpl implements MessageService {
 		logger.info("***handlePostback***");
 		switch (payload) {
 		case "yes":
-			payloadGetStarted(senderID);
 			break;
 		case "no":
-			payloadGetStarted(senderID);
 			break;
 		case PayloadConstants.GET_STARTED:
 			payloadGetStarted(senderID);
