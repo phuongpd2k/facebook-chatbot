@@ -11,6 +11,7 @@ import info.zuyfun.bot.facebook.template.MessageTemplate;
 import info.zuyfun.bot.facebook.template.Typing;
 import info.zuyfun.bot.schedule.HerokuIdle;
 import info.zuyfun.bot.utils.UserAction;
+import info.zuyfun.bot.utils.Validation;
 
 @EnableScheduling
 @Configuration
@@ -42,7 +43,12 @@ public class BotConfig {
 	}
 
 	@Bean
-	ObjectMapper mapper() {
+	public ObjectMapper mapper() {
 		return new ObjectMapper();
+	}
+
+	@Bean
+	public Validation validation() {
+		return new Validation();
 	}
 }

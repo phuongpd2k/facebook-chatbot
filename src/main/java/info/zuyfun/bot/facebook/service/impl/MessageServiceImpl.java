@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.zuyfun.bot.constants.ChatBotAPIUrl;
 import info.zuyfun.bot.constants.CommandConstants;
+import info.zuyfun.bot.constants.CommandPattern;
 import info.zuyfun.bot.constants.FacebookAPIUrl;
 import info.zuyfun.bot.constants.MessageConstants;
 import info.zuyfun.bot.constants.PayloadConstants;
@@ -33,6 +34,7 @@ import info.zuyfun.bot.facebook.service.MessageService;
 import info.zuyfun.bot.facebook.template.MessageTemplate;
 import info.zuyfun.bot.service.UserService;
 import info.zuyfun.bot.utils.UserAction;
+import info.zuyfun.bot.utils.Validation;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -53,6 +55,8 @@ public class MessageServiceImpl implements MessageService {
 	UserService userService;
 	@Autowired
 	ObjectMapper mapper;
+	@Autowired
+	Validation validation;
 
 	public void callSendAPI(Object objRequest) {
 		logger.info("***API Send***");
@@ -184,21 +188,12 @@ public class MessageServiceImpl implements MessageService {
 		logger.info("***textArray : {}", textArray.length);
 		Request objRequest = null;
 		try {
-			if (textArray.length == 1) {
-				objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
-			} else if (textArray.length > 1) {
-
-				if (textArray[0].equals(CommandConstants.CHAT_WITH_BOT)) {
-					if (textArray[1].equals(CommandConstants.ON)) {
-						logger.info("***textArray.length > 1 : {}", textArray[1]);
-						userService.updateIsChatWithBot(senderID, true);
-						objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_ON_CHAT_BOT);
-					}
-					if (textArray[1].equals(CommandConstants.OFF)) {
-						userService.updateIsChatWithBot(senderID, false);
-						objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_OFF_CHAT_BOT);
-					}
-				}
+			if (validation.checkPattern(CommandPattern.HELP, messageText)) {
+				objRequest = messageTemplate.sendText(senderID, "HELP");
+			} else if (validation.checkPattern(CommandPattern.CHAT_ON, messageText)) {
+				objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_ON_CHAT_BOT);
+			} else if (validation.checkPattern(CommandPattern.CHAT_OFF, messageText)) {
+				objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_OFF_CHAT_BOT);
 			} else {
 				objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
 			}
