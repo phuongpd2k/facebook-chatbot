@@ -165,8 +165,7 @@ public class MessageServiceImpl implements MessageService {
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
 		try {
-			String url = ChatBotAPIUrl.SIMSIMI;
-			url.replace("field", messageText);
+			String url = ChatBotAPIUrl.SIMSIMI.replace("field", messageText);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Accept", "*/*");
 			headers.add("User-Agent", "PostmanRuntime/7.28.2");
