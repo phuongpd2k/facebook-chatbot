@@ -19,7 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.zuyfun.bot.constants.ChatBotAPIUrl;
-import info.zuyfun.bot.constants.CommandConstants;
 import info.zuyfun.bot.constants.CommandPattern;
 import info.zuyfun.bot.constants.FacebookAPIUrl;
 import info.zuyfun.bot.constants.MessageConstants;
@@ -50,7 +49,6 @@ public class MessageServiceImpl implements MessageService {
 
 	@Autowired
 	MessageTemplate messageTemplate;
-
 	@Autowired
 	UserService userService;
 	@Autowired
@@ -184,12 +182,10 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	public void patternCommand(BigDecimal senderID, String messageText) {
-		String[] textArray = messageText.split("\\s+");
-		logger.info("***textArray : {}", textArray.length);
 		Request objRequest = null;
 		try {
 			if (validation.checkPattern(CommandPattern.HELP, messageText)) {
-				objRequest = messageTemplate.sendText(senderID, "HELP");
+				objRequest = messageTemplate.sendText(senderID, MessageConstants.HELP);
 			} else if (validation.checkPattern(CommandPattern.CHAT_ON, messageText)) {
 				objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_ON_CHAT_BOT);
 			} else if (validation.checkPattern(CommandPattern.CHAT_OFF, messageText)) {
