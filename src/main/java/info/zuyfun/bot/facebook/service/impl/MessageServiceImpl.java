@@ -1,6 +1,7 @@
 package info.zuyfun.bot.facebook.service.impl;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -164,16 +165,17 @@ public class MessageServiceImpl implements MessageService {
 	public Simsimi callSimsimi(String messageText) {
 		logger.info("***Call Simsimi***");
 		try {
-			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ChatBotAPIUrl.SIMSIMI)
-					.queryParam("text", messageText).queryParam("lang", "vi_VN");
-			String urlTest = "https://api.simsimi.net/v1/?text=sủa&lang=vi_VN";
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ChatBotAPIUrl.SIMSIMI)
+//					.queryParam("text", messageText).queryParam("lang", "vi_VN");
+			URI uri = UriComponentsBuilder.fromHttpUrl(ChatBotAPIUrl.SIMSIMI).queryParam("text", messageText)
+					.queryParam("lang", "vi_VN").build(true).toUri();
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Accept", "*/*");
 			headers.add("User-Agent", "PostmanRuntime/7.28.2");
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-			String url = builder.build().encode().toUriString();
-			ResponseEntity<String> res = restTemplate.exchange(urlTest, HttpMethod.POST, entity, String.class);
-			logger.info("***URL: {}", urlTest);
+			String url = uri.toString();
+			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+			logger.info("***URL: {}", url);
 			logger.info("***res REsponse: {}", res.getBody());
 			Simsimi objSimsimi = mapper.readValue(res.getBody(), Simsimi.class);
 			logger.info("***objSimsimi REsponse: {}", objSimsimi);
