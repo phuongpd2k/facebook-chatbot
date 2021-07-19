@@ -171,7 +171,7 @@ public class MessageServiceImpl implements MessageService {
 			headers.add("User-Agent", "PostmanRuntime/7.28.2");
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 			String url = builder.build().encode().toUriString();
-			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 			logger.info("***URL: {}", url);
 			logger.info("***res REsponse: {}", res.getBody());
 			Simsimi objSimsimi = mapper.readValue(res.getBody(), Simsimi.class);
