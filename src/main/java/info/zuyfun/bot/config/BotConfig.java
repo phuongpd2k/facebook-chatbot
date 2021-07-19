@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import info.zuyfun.bot.facebook.template.MessageTemplate;
 import info.zuyfun.bot.facebook.template.Typing;
 import info.zuyfun.bot.schedule.HerokuIdle;
-import info.zuyfun.bot.utils.UserAction;
+import info.zuyfun.bot.utils.ValidateAction;
 import info.zuyfun.bot.utils.Validation;
 
 @EnableScheduling
@@ -38,8 +38,8 @@ public class BotConfig {
 	}
 
 	@Bean
-	public UserAction userAction() {
-		return new UserAction();
+	public ValidateAction validateAction() {
+		return new ValidateAction();
 	}
 
 	@Bean

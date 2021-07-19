@@ -32,7 +32,7 @@ import info.zuyfun.bot.facebook.model.Simsimi;
 import info.zuyfun.bot.facebook.service.MessageService;
 import info.zuyfun.bot.facebook.template.MessageTemplate;
 import info.zuyfun.bot.service.UserService;
-import info.zuyfun.bot.utils.UserAction;
+import info.zuyfun.bot.utils.ValidateAction;
 import info.zuyfun.bot.utils.Validation;
 
 @Service
@@ -43,7 +43,7 @@ public class MessageServiceImpl implements MessageService {
 	@Value("${fb_access_token}")
 	private String FB_ACCESS_TOKEN;
 	@Autowired
-	UserAction userAction;
+	ValidateAction validateAction;
 	@Autowired
 	protected RestTemplate restTemplate;
 
@@ -104,7 +104,7 @@ public class MessageServiceImpl implements MessageService {
 				logger.info("***Message object: {}", objMessage);
 				logger.info("***User object: {}", userService.getBySenderID(senderID));
 				String messageText = objMessage.getText().toLowerCase();
-				if (userAction.isCommand(messageText)) {
+				if (validateAction.isCommand(messageText)) {
 					patternCommand(senderID, messageText);
 				} else if (userService.isChatWithBot(senderID)) {
 					// Call simsimi here
@@ -140,6 +140,9 @@ public class MessageServiceImpl implements MessageService {
 		case "yes":
 			payloadGetStarted(senderID);
 			break;
+		case "no":
+			payloadGetStarted(senderID);
+			break;
 		case PayloadConstants.GET_STARTED:
 			payloadGetStarted(senderID);
 			break;
@@ -150,8 +153,12 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public void typingAction(BigDecimal senderID, String action) {
-		Action objAction = messageTemplate.typingAction(senderID, action);
-		callSendAPI(objAction);
+		try {
+			Action objAction = messageTemplate.typingAction(senderID, action);
+			callSendAPI(objAction);
+		} catch (Exception e) {
+			logger.error("***typingAction Exception: {}", e);
+		}
 	}
 
 	public Simsimi callSimsimi(String messageText) {
@@ -175,10 +182,14 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	public void payloadGetStarted(BigDecimal senderID) {
-		Profile userProfile = callGetUserAPI(senderID);
-		String messageText = MessageConstants.PAYLOAD_GET_STARTED.replace("username", userProfile.getFirstName());
-		Request objRequest = messageTemplate.sendText(senderID, messageText);
-		callSendAPI(objRequest);
+		try {
+			Profile userProfile = callGetUserAPI(senderID);
+			String messageText = MessageConstants.PAYLOAD_GET_STARTED.replace("username", userProfile.getFirstName());
+			Request objRequest = messageTemplate.sendText(senderID, messageText);
+			callSendAPI(objRequest);
+		} catch (Exception e) {
+			logger.error("***payloadGetStarted Exception: {}", e);
+		}
 	}
 
 	public void patternCommand(BigDecimal senderID, String messageText) {
@@ -187,8 +198,10 @@ public class MessageServiceImpl implements MessageService {
 			if (validation.checkPattern(CommandPattern.HELP, messageText)) {
 				objRequest = messageTemplate.sendText(senderID, MessageConstants.HELP);
 			} else if (validation.checkPattern(CommandPattern.CHAT_ON, messageText)) {
+				userService.updateIsChatWithBot(senderID, true);
 				objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_ON_CHAT_BOT);
 			} else if (validation.checkPattern(CommandPattern.CHAT_OFF, messageText)) {
+				userService.updateIsChatWithBot(senderID, false);
 				objRequest = messageTemplate.sendText(senderID, MessageConstants.TURN_OFF_CHAT_BOT);
 			} else {
 				objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
