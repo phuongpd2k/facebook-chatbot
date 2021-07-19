@@ -108,11 +108,17 @@ public class MessageServiceImpl implements MessageService {
 				if (validateAction.isCommand(messageText)) {
 					patternCommand(senderID, messageText);
 				} else if (userService.isChatWithBot(senderID)) {
-					// Call simsimi here
-					Simsimi objSim = callSimsimi(messageText);
-					if (objSim != null) {
-						objRequest = messageTemplate.sendText(senderID, objSim.getSuccess());
+					// Check text exist owner name
+					if (validation.checkPattern(CommandPattern.OWNER, messageText)) {
+						objRequest = messageTemplate.sendText(senderID, MessageConstants.OWNER_INFO);
+					} else {
+						// Call simsimi here
+						Simsimi objSim = callSimsimi(messageText);
+						if (objSim != null) {
+							objRequest = messageTemplate.sendText(senderID, objSim.getSuccess());
+						}
 					}
+
 				} else {
 					objRequest = messageTemplate.sendText(senderID, MessageConstants.MESSAGE_ERROR);
 				}
