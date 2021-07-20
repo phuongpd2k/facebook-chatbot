@@ -1,8 +1,6 @@
 package info.zuyfun.bot.facebook.service.impl;
 
 import java.math.BigDecimal;
-import java.net.URI;
-import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,7 +118,7 @@ public class MessageServiceImpl implements MessageService {
 						// Call simsimi here
 						Simsimi objSim = callSimsimi(messageText);
 						if (objSim != null) {
-							objRequest = messageTemplate.sendText(senderID, objSim.getSuccess());
+							objRequest = messageTemplate.sendText(senderID, objSim.getMessages().getResponse());
 						}
 					}
 
@@ -179,7 +177,7 @@ public class MessageServiceImpl implements MessageService {
 			headers.add("Accept", "*/*");
 			headers.add("User-Agent", "PostmanRuntime/7.28.2");
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 			Simsimi objSimsimi = mapper.readValue(res.getBody(), Simsimi.class);
 			return objSimsimi;
 		} catch (Exception e) {

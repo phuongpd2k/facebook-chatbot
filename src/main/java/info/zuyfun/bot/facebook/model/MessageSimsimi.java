@@ -1,7 +1,5 @@
 package info.zuyfun.bot.facebook.model;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,15 +9,13 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class Simsimi implements Serializable {
-	/**
-	* 
-	*/
-	private static final long serialVersionUID = 1L;
-	@JsonProperty("method")
-	private String method;
-	@JsonProperty("messages")
-	private MessageSimsimi messages;
-	@JsonProperty("donate")
-	private String donate;
+public class MessageSimsimi {
+	@JsonProperty("ask")
+	private String ask;
+	@JsonProperty("text")
+	private String text;
+	@JsonProperty("response")
+	private String response;
+	@JsonProperty("result")
+	private String result;
 }
