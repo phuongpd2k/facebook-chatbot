@@ -28,8 +28,9 @@ public class BotController {
 	private String VERIFY_TOKEN;
 	@Autowired
 	private MessageService service;
-	public static final String ON = "on";
-	public static final String OFF = "off";
+	public static final String ON = "typing_on";
+	public static final String OFF = "typing_off";
+	public static final String SEEN = "mark_seen";
 
 	@RequestMapping("/herokuIdle")
 	public ResponseEntity<Object> herokuNotIdle() {
@@ -65,6 +66,7 @@ public class BotController {
 				if (entry.getMessaging() != null) {
 					for (Event event : entry.getMessaging()) {
 						BigDecimal senderID = event.getSender().getId();
+						service.typingAction(senderID, SEEN);
 						service.typingAction(senderID, ON);
 						if (event.getMessage() != null) {
 							service.handleMessage(senderID, event.getMessage());

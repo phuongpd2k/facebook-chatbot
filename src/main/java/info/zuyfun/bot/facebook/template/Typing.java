@@ -11,7 +11,7 @@ public class Typing {
 		RequestRecipient objRecipient = new RequestRecipient();
 		objAction.setReceipient(objRecipient);
 		objAction.getReceipient().setId(id);
-		objAction.setSenderAction("typing_" + action);
+		objAction.setSenderAction(action);
 		return objAction;
 	}
 }
