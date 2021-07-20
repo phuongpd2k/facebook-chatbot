@@ -179,7 +179,7 @@ public class MessageServiceImpl implements MessageService {
 			headers.add("Accept", "*/*");
 			headers.add("User-Agent", "PostmanRuntime/7.28.2");
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 			Simsimi objSimsimi = mapper.readValue(res.getBody(), Simsimi.class);
 			return objSimsimi;
 		} catch (Exception e) {
