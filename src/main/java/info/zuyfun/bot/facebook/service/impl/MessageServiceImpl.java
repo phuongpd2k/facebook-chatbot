@@ -24,6 +24,7 @@ import info.zuyfun.bot.constants.CommandPattern;
 import info.zuyfun.bot.constants.FacebookAPIUrl;
 import info.zuyfun.bot.constants.MessageConstants;
 import info.zuyfun.bot.constants.PayloadConstants;
+import info.zuyfun.bot.entity.User;
 import info.zuyfun.bot.facebook.model.Action;
 import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Message;
@@ -103,7 +104,11 @@ public class MessageServiceImpl implements MessageService {
 			Request objRequest = null;
 			if (objMessage.getText() != null) {
 				logger.info("***Message object: {}", objMessage);
-				logger.info("***User object: {}", userService.getBySenderID(senderID));
+				if (userService.getBySenderID(senderID) == null) {
+					User objUser = new User();
+					objUser.setRecipeintID(senderID);
+					userService.addUser(objUser);
+				}
 				String messageText = objMessage.getText().toLowerCase();
 				if (validateAction.isCommand(messageText)) {
 					patternCommand(senderID, messageText);
