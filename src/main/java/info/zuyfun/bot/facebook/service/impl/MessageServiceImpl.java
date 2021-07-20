@@ -118,7 +118,7 @@ public class MessageServiceImpl implements MessageService {
 						// Call simsimi here
 						Simsimi objSim = callSimsimi(messageText);
 						if (objSim != null) {
-							objRequest = messageTemplate.sendText(senderID, objSim.getMessages().getResponse());
+							objRequest = messageTemplate.sendText(senderID, objSim.getMessages().get(0).getResponse());
 						}
 					}
 
