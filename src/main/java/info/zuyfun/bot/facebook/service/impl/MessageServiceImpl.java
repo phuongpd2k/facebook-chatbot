@@ -26,6 +26,7 @@ import info.zuyfun.bot.entity.User;
 import info.zuyfun.bot.facebook.model.Action;
 import info.zuyfun.bot.facebook.model.Attachment;
 import info.zuyfun.bot.facebook.model.Message;
+import info.zuyfun.bot.facebook.model.MessageChatBot;
 import info.zuyfun.bot.facebook.model.Profile;
 import info.zuyfun.bot.facebook.model.Request;
 import info.zuyfun.bot.facebook.model.Simsimi;
@@ -182,6 +183,23 @@ public class MessageServiceImpl implements MessageService {
 			return objSimsimi;
 		} catch (Exception e) {
 			logger.error("***callSimsimi Exception: {}", e);
+		}
+		return null;
+	}
+
+	public MessageChatBot callChatBot(String messageText) {
+		logger.info("***Call ChatBot***");
+		try {
+			String url = ChatBotAPIUrl.TUANXUONG.replace("field", messageText);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Accept", "*/*");
+			headers.add("User-Agent", "PostmanRuntime/7.28.2");
+			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+			MessageChatBot objMessage = mapper.readValue(res.getBody(), MessageChatBot.class);
+			return objMessage;
+		} catch (Exception e) {
+			logger.error("***callChatBot Exception: {}", e);
 		}
 		return null;
 	}
