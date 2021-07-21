@@ -200,7 +200,7 @@ public class MessageServiceImpl implements MessageService {
 			headers.add("Accept", "*/*");
 			headers.add("User-Agent", "PostmanRuntime/7.28.2");
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+			ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 			MessageChatBot objMessage = mapper.readValue(res.getBody(), MessageChatBot.class);
 			return objMessage;
 		} catch (Exception e) {
