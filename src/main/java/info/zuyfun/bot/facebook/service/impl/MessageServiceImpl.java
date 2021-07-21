@@ -116,10 +116,15 @@ public class MessageServiceImpl implements MessageService {
 					if (validation.checkPattern(CommandPattern.OWNER, messageText)) {
 						objRequest = messageTemplate.sendText(senderID, MessageConstants.OWNER_INFO);
 					} else {
-						// Call simsimi here
-						Simsimi objSim = callSimsimi(messageText);
-						if (objSim != null) {
-							objRequest = messageTemplate.sendText(senderID, objSim.getMessages().get(0).getResponse());
+//						// Call simsimi here
+//						Simsimi objSim = callSimsimi(messageText);
+//						if (objSim != null) {
+//							objRequest = messageTemplate.sendText(senderID, objSim.getMessages().get(0).getResponse());
+//						}
+						// Call ChatBot
+						MessageChatBot objMessageChatBot = callChatBot(messageText);
+						if (objMessageChatBot != null) {
+							objRequest = messageTemplate.sendText(senderID, objMessageChatBot.getResponse());
 						}
 					}
 
