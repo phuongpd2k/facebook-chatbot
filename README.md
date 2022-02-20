@@ -2,10 +2,10 @@
 <h1>Demo: <a href="https://www.facebook.com/toidicakhia">Tôi đi cà khịa</a></h1>
 
 
-###Getting Started
-To start use this bot you need following step below:
+### Getting Started
+* To start use this bot you need following step below:
 
-###Steps to build:
+### Steps to build:
 
 1. Install java 8
 2. Install eclipse
