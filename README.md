@@ -14,3 +14,5 @@
 5. Change enviroment variable in application.properties with your token you have when create Facebook App
 6. Run with mvn spring-boot:run
 
+## License
+This project is released under the <a href="https://github.com/zuyfun/facebook-chatbot/blob/master/LICENSE">[BSD 3-Clause]</a> License.
