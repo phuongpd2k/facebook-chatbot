@@ -1,18 +1,28 @@
+# java-spring-chatbot
+A Chatbot Facebook with Java Spring RESTful API
 
-<h1>Demo: <a href="https://www.facebook.com/toidicakhia">Tôi đi cà khịa</a></h1>
+# Requirements
+- Java 8
+- Maven
+- Posgresql
+- Facebook App
+- Heroku
 
+# Setup
+### 1. Install java 8
+```shell script
+sudo apt-get install openjdk-8-jdk
+```
 
-### Getting Started
-* To start use this bot you need following step below:
+Docs: https://docs.datastax.com/en/jdk-install/doc/jdk-install/installOpenJdkDeb.html
 
-### Steps to build:
+### 2. Clone this repo and import to your Maven
+### 3. Create facebook app and then take webhook key
+### 4. Change enviroment variable in application.properties with your token you have when create Facebook App
+### 5. Run with `mvn spring-boot:run`
 
-1. Install java 8
-2. Install eclipse
-3. Import this project with maven
-4. Create facebook app and then take webhook key
-5. Change enviroment variable in application.properties with your token you have when create Facebook App
-6. Run with mvn spring-boot:run
+<h3>Demo: <a href="https://www.facebook.com/toidicakhia">Tôi đi cà khịa</a></h1>
 
 ## License
 This project is released under the <a href="https://github.com/zuyfun/facebook-chatbot/blob/master/LICENSE">[BSD 3-Clause]</a> License.
+
